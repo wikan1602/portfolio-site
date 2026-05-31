@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link"; // Di Next.js, wajib pakai Link untuk navigasi instan tanpa reload
+import Navbar from "@/components/Navbar"; // <-- Impor komponen Navbar baru kita
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,39 +27,10 @@ export default function RootLayout({
     <html lang="id" className="scroll-smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-slate-100 min-h-screen flex flex-col`}>
         
-        {/* GLOBAL NAVBAR */}
-        <header className="sticky top-0 z-50 w-full border-b border-slate-900 bg-slate-950/80 backdrop-blur-md">
-          <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            {/* Logo / Nama */}
-            <Link href="/" className="font-mono font-bold text-lg tracking-tight text-white hover:text-blue-400 transition-colors">
-              wikan<span className="text-blue-500">.dev</span>
-            </Link>
+        {/* Panggil Navbar Komponen di Sini */}
+        <Navbar />
 
-            {/* Menu Navigasi */}
-            <nav className="flex items-center gap-6 text-sm font-medium text-slate-400">
-              <Link href="/services" className="hover:text-slate-100 transition-colors">
-                Services
-              </Link>
-              <Link href="/about" className="hover:text-slate-100 transition-colors">
-                About
-              </Link>
-              
-              {/* Selipkan Baris Ini */}
-              <Link href="/blog" className="hover:text-slate-100 transition-colors">
-                Blog
-              </Link>
-              
-              <Link href="/portfolio" className="hover:text-slate-100 transition-colors">
-                Portfolio
-              </Link> 
-              <Link href="/contact" className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs transition-colors">
-                Hire Me
-              </Link>
-            </nav>
-          </div>
-        </header>
-
-        {/* KONTEN HALAMAN (Isinya adalah page.tsx dari masing-masing folder) */}
+        {/* KONTEN HALAMAN */}
         <div className="flex-grow">
           {children}
         </div>
