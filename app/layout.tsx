@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wikan P. | Automation & AI Specialist",
+  title: "Wikan | Automation & AI Specialist",
   description: "Portfolio & Jasa Otomatisasi Workflow & Integrasi AI/LLM",
 };
 
