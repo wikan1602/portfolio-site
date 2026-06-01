@@ -31,7 +31,7 @@ export default function ContactPage() {
     setStatusMessage(null);
 
     // Tempelkan URL Test Webhook n8n kamu di bawah ini
-    const N8N_WEBHOOK_URL = "https://n8n.wikan-ai.my.id/webhook-test/portfolio-inquiry";
+    const N8N_WEBHOOK_URL = "https://n8n.wikan-ai.my.id/webhook/portfolio-inquiry";
 
     try {
       const response = await fetch(N8N_WEBHOOK_URL, {
