@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg'; // 1. Import pg pool untuk koneksi database
 
-// 2. Inisialisasi pool koneksi database (menggunakan variabel DATABASE_URL dari Vercel)
+// 💡 CARA PAMUNGKAS: Bedah URL secara murni agar parameter SSL bawaan cloud terbuang murni
+const dbUrl = new URL(process.env.DATABASE_URL || '');
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false, // <-- WAJIB TAMBAHKAN INI untuk memaksa matikan SSL dari sisi client
+  user: decodeURIComponent(dbUrl.username),
+  password: decodeURIComponent(dbUrl.password),
+  host: dbUrl.hostname,
+  port: parseInt(dbUrl.port || '5432', 10),
+  database: dbUrl.pathname.substring(1),
+  ssl: false, // Mutlak matikan SSL
 });
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_TOKEN || "One0969";
