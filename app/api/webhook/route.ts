@@ -1,4 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Pool } from 'pg'; // 1. Import pg pool untuk koneksi database
+
+// 2. Inisialisasi pool koneksi database (menggunakan variabel DATABASE_URL dari Vercel)
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_TOKEN || "One0969";
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
@@ -37,8 +43,7 @@ export async function POST(request: NextRequest) {
       if (message.type === 'text') {
         const userMessage = message.text.body;
 
-        // Jalankan logika chatbot (minta jawaban Grok & kirim ke WA)
-        // Catatan: Di serverless environment seperti Vercel, kita panggil secara sequential
+        // Jalankan logika chatbot yang sekarang sudah dibekali memori database
         await handleChatbotLogic(userMessage, from, phone_number_id);
       }
     }
@@ -47,35 +52,62 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ status: 'SUCCESS' }, { status: 200 });
   } catch (error) {
     console.error('Error saat menerima webhook:', error);
-    // Tetap kembalikan 200 agar Meta tidak terus-menerus mengirim ulang payload yang error
     return NextResponse.json({ status: 'ERROR' }, { status: 200 });
   }
 }
 
-// 🤖 FUNGSI LOGIKA BOT (Grok AI -> WhatsApp)
+// 🤖 FUNGSI LOGIKA BOT (PostgreSQL + Groq -> WhatsApp)
 async function handleChatbotLogic(userMessage: string, recipientPhone: string, phone_number_id: string) {
   try {
-    // A. Tanya ke Groq (Menggunakan endpoint resmi GROQ yang kompatibel dengan OpenAI format)
-    // Contoh jika menggunakan GROQ (groq.com)
+    // A. SIMPAN PESAN USER BARU KE DATABASE
+    await pool.query(
+      'INSERT INTO wa_chat_history (phone_number, role, content) VALUES ($1, $2, $3)',
+      [recipientPhone, 'user', userMessage]
+    );
+
+    // B. AMBIL 10 PESAN TERAKHIR (SLIDING WINDOW)
+    // Mengambil riwayat percakapan terbaru sebanyak maksimal 10 baris
+    const dbResult = await pool.query(
+      'SELECT role, content FROM wa_chat_history WHERE phone_number = $1 ORDER BY created_at DESC LIMIT 10',
+      [recipientPhone]
+    );
+    
+    // Karena query DESC mengambil data terbaru dulu, kita balik (.reverse()) 
+    // agar urutan percakapannya runtut dari lama ke baru saat dibaca oleh Groq
+    const savedHistory = dbResult.rows.reverse();
+
+    // C. STRUKTURKAN ARRAY MESSAGES DENGAN HISTORY
+    const messagesToGroq = [
+      { 
+        role: 'system', 
+        content: 'Kamu adalah asisten WhatsApp AI yang ramah. Kamu mengingat konteks obrolan sebelumnya dengan user.' 
+      },
+      ...savedHistory // Menyisipkan 10 percakapan terakhir secara dinamis
+    ];
+
+    // D. TANYA KE GROQ
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
+      method: 'POST',
+      headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}` // Sesuaikan nama ENV
-    },
-    body: JSON.stringify({
-        model: 'groq/compound-mini', // Model populer di Groq yang super cepat
-        messages: [
-        { role: 'system', content: 'Kamu adalah asisten WhatsApp AI yang ramah.' },
-        { role: 'user', content: userMessage }
-        ]
-    })
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'groq/compound-mini', // Model andalanmu yang super cepat
+        messages: messagesToGroq
+      })
     });
 
     const groqData = await groqResponse.json();
     const aiReply = groqData.choices?.[0]?.message?.content || "Maaf, aku sedang tidak bisa berpikir jernih.";
 
-    // B. Kirim balik jawaban ke WhatsApp Cloud API
+    // E. SIMPAN JAWABAN BOT KE DATABASE
+    await pool.query(
+      'INSERT INTO wa_chat_history (phone_number, role, content) VALUES ($1, $2, $3)',
+      [recipientPhone, 'assistant', aiReply]
+    );
+
+    // F. KIRIM BALIK JAWABAN KE WHATSAPP CLOUD API
     const whatsappResponse = await fetch(`https://graph.facebook.com/v20.0/${phone_number_id}/messages`, {
       method: 'POST',
       headers: {
