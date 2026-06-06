@@ -64,7 +64,7 @@ async function handleChatbotLogic(userMessage: string, recipientPhone: string, p
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}` // Sesuaikan nama ENV
     },
     body: JSON.stringify({
-        model: 'llama3-8b-8192', // Model populer di Groq yang super cepat
+        model: 'groq/compound-mini', // Model populer di Groq yang super cepat
         messages: [
         { role: 'system', content: 'Kamu adalah asisten WhatsApp AI yang ramah.' },
         { role: 'user', content: userMessage }
