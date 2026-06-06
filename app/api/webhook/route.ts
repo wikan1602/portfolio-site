@@ -4,6 +4,7 @@ import { Pool } from 'pg'; // 1. Import pg pool untuk koneksi database
 // 2. Inisialisasi pool koneksi database (menggunakan variabel DATABASE_URL dari Vercel)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: false, // <-- WAJIB TAMBAHKAN INI untuk memaksa matikan SSL dari sisi client
 });
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_TOKEN || "One0969";
