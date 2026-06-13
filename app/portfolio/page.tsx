@@ -26,6 +26,14 @@ export default function PortfolioPage() {
       impact: "Elevated predictive performance from a 0.73 tabular baseline to a 0.9198 multimodal fusion AUC, achieving an elite 90.9% recall."
     },
     {
+      slug: "price-intelligence-anomaly-detection",
+      title: "Production-Grade Price Intelligence & Anomaly Detection Pipeline",
+      description: "Engineered a robust, multi-stage pricing recovery system to accurately reconstruct missing e-commerce data during scraping outages by utilizing cyclical temporal encodings and historical value ratios.",
+      category: "Data Science & Production Pipelines",
+      tags: ["LightGBM", "Optuna", "Python", "Feature Engineering", "Data Pipeline"],
+      impact: "Deploys real-time dynamic market-shift anchors with multilevel cold-start defenses and vectorized stability safeguards ($+1 \\times 10^{-5}$) against numerical explosions."
+    },
+    {
       slug: "pah-detection-bi-lstm",
       title: "Pulmonary Arterial Hypertension Detection from PPG Signals",
       description: "Led the development of an end-to-end signal processing and classification pipeline utilizing Wavelet Scattering Transform and a Bidirectional LSTM network for non-invasive PAH screening.",
