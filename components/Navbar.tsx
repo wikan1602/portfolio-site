@@ -13,7 +13,7 @@ export default function Navbar() {
         
         {/* Logo */}
         <Link href="/" className="font-mono font-bold text-lg tracking-tight text-white hover:text-blue-400 transition-colors">
-          wikan<span className="text-blue-500">.dev</span>
+          wikan-ai<span className="text-blue-500">.my.id</span>
         </Link>
 
         {/* DESKTOP MENU (hidden di HP, flex di desktop 'md:') */}

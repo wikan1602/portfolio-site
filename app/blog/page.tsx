@@ -1,19 +1,19 @@
 export default function BlogPage() {
-  // Mock data artikel blog (Sesuai rekomendasi konten di blueprint)
+  // Mock blog article data (Aligned with blueprint recommendations)
   const articles = [
     {
-      slug: "kapan-pakai-n8n-vs-python-script",
-      title: "Kapan Harus Pakai n8n vs Tulis Script Python Sendiri?",
-      description: "Panduan arsitektur untuk memilih antara visual workflow automation atau custom scripting berdasarkan kompleksitas, skalabilitas, dan maintenance biaya.",
-      date: "31 Mei 2026",
+      slug: "when-to-use-n8n-vs-python-script",
+      title: "When to Use n8n vs. Writing Your Own Python Scripts",
+      description: "An architectural guide to choosing between visual workflow automation and custom scripting based on complexity, scalability, and maintenance costs.",
+      date: "May 31, 2026",
       readingTime: "5 min read",
       tags: ["n8n", "Python", "Architecture"]
     },
     {
-      slug: "strategi-deploy-local-llm-enterprise",
-      title: "Strategi Deploy Local LLM untuk Menjaga Privasi Data Perusahaan",
-      description: "Bagaimana startup dan enterprise bisa memanfaatkan model open-source (seperti Qwen) di server internal tanpa membiarkan data sensitif bocor ke API pihak ketiga.",
-      date: "25 Mei 2026",
+      slug: "local-llm-enterprise-deployment-strategy",
+      title: "Local LLM Deployment Strategies for Safeguarding Corporate Data Privacy",
+      description: "How startups and enterprises can leverage open-source models (such as Qwen) on internal servers without leaking sensitive data to third-party APIs.",
+      date: "May 25, 2026",
       readingTime: "8 min read",
       tags: ["LLM", "Security", "Private Cloud"]
     }
@@ -33,11 +33,11 @@ export default function BlogPage() {
             Technical Blog
           </h1>
           <p className="text-slate-400 text-lg font-light">
-            Berbagi opini, tutorial, dan catatan arsitektur seputar dunia otomatisasi workflow, integrasi AI, dan rekayasa perangkat lunak.
+            Sharing insights, tutorials, and architectural notes covering workflow automation, AI integration, and software engineering.
           </p>
         </div>
 
-        {/* List Artikel */}
+        {/* Article List */}
         <div className="space-y-8 pt-4">
           {articles.map((article, index) => (
             <article 
@@ -46,19 +46,19 @@ export default function BlogPage() {
             >
               <a href={`/blog/${article.slug}`} className="block space-y-3">
                 
-                {/* Meta: Tanggal & Estimasi Baca */}
+                {/* Meta: Date & Reading Time Estimate */}
                 <div className="flex items-center gap-3 text-xs font-mono text-slate-500">
                   <span>{article.date}</span>
                   <span>•</span>
                   <span>{article.readingTime}</span>
                 </div>
 
-                {/* Judul Artikel */}
+                {/* Article Title */}
                 <h2 className="text-xl font-bold text-slate-200 group-hover:text-blue-400 transition-colors">
                   {article.title}
-                </h2>
+                </h2> 
 
-                {/* Deskripsi Singkat */}
+                {/* Brief Description */}
                 <p className="text-slate-400 text-sm font-light leading-relaxed">
                   {article.description}
                 </p>

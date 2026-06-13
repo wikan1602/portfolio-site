@@ -2,7 +2,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center items-center px-6 relative overflow-hidden">
       
-      {/* Efek Cahaya Glow di Background (Khas Web AI Modern) */}
+      {/* Background Glow Light Effect (Modern AI Web Style) */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
       
       <div className="max-w-3xl text-center z-10 space-y-6">
@@ -13,14 +13,14 @@ export default function Home() {
           Available for Freelance & Consultation
         </div>
 
-        {/* Headline Utama (Sesuai Blueprint) */}
+        {/* Main Headline (As per Blueprint) */}
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
           I automate boring workflows and build AI-powered tools.
         </h1>
 
         {/* Sub-headline / Clarifier */}
         <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
-          Membantu startup dan bisnis meningkatkan efisiensi lewat otomatisasi data pipeline menggunakan <span className="text-blue-400 font-medium">n8n</span> dan integrasi <span className="text-purple-400 font-medium">Local LLM</span> yang aman, privat, & berlatensi rendah.
+          Helping startups and businesses increase efficiency through data pipeline automation using <span className="text-blue-400 font-medium">n8n</span> and secure, private, & low-latency <span className="text-purple-400 font-medium">Local LLM</span> integration.
         </p>
 
         {/* Mini Tech Stack Tags */}
@@ -34,13 +34,13 @@ export default function Home() {
             href="/services" 
             className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-lg shadow-blue-500/20"
           >
-            Lihat Layanan Jasa
+            View Services
           </a>
           <a 
             href="/contact" 
             className="bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-6 py-3 rounded-lg font-medium transition-colors"
           >
-            Hubungi Saya
+            Contact Me
           </a>
         </div>
 

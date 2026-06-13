@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "@/components/Navbar"; // <-- Impor komponen Navbar baru kita
+import Navbar from "@/components/Navbar"; // <-- Import our new Navbar component
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Wikan | Automation & AI Specialist",
-  description: "Portfolio & Jasa Otomatisasi Workflow & Integrasi AI/LLM",
+  description: "Portfolio & Services for Workflow Automation & AI/LLM Integration",
 };
 
 export default function RootLayout({
@@ -24,13 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-slate-100 min-h-screen flex flex-col`}>
         
-        {/* Panggil Navbar Komponen di Sini */}
+        {/* Call Navbar Component Here */}
         <Navbar />
 
-        {/* KONTEN HALAMAN */}
+        {/* PAGE CONTENT */}
         <div className="flex-grow">
           {children}
         </div>
@@ -39,11 +39,25 @@ export default function RootLayout({
         <footer className="w-full border-t border-slate-900 bg-slate-950 py-8 text-center text-xs text-slate-500 font-mono">
           <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              © {new Date().getFullYear()} wikan.dev. All rights reserved.
+              © {new Date().getFullYear()} wikan-ai.my.id. All rights reserved.
             </div>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-slate-300 transition-colors">GitHub</a>
-              <a href="#" className="hover:text-slate-300 transition-colors">LinkedIn</a>
+              <a 
+                href="https://github.com/wikan1602" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-slate-300 transition-colors"
+              >
+                GitHub
+              </a>
+              <a 
+                href="https://linkedin.com/in/wikan-priambudi" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-slate-300 transition-colors"
+              >
+                LinkedIn
+              </a>
             </div>
           </div>
         </footer>
