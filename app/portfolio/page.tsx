@@ -26,7 +26,7 @@ export default function PortfolioPage() {
       category: "MLOps & Data Engineering",
       tags: ["Docker Compose", "Apache Airflow", "MLflow", "FastAPI", "XGBoost", "PostgreSQL"],
       impact: "Elevated predictive performance from a 0.73 tabular baseline to a 0.9198 multimodal fusion AUC, achieving an elite 90.9% recall.",
-      link: "/portfolio/multimodal-mlops-clinical-risk"
+      link: "https://github.com/wikan1602/clinical-mlops-pipeline"
     },
     {
       slug: "price-intelligence-anomaly-detection",
@@ -35,7 +35,7 @@ export default function PortfolioPage() {
       category: "Data Science & Production Pipelines",
       tags: ["LightGBM", "Optuna", "Python", "Feature Engineering", "Data Pipeline"],
       impact: "Successfully reconstructed missing product prices during automated scraping outages with multilevel fallback defenses, maintaining 100% mathematical stability in production.",
-      link: "https://github.com/wikan1602/mrscraper-price-pipeline" // Ganti dengan URL repo aslimu jika berbeda
+      link: "https://github.com/wikan1602/mrscraper-price-intelligence" // Ganti dengan URL repo aslimu jika berbeda
     },
     {
       slug: "pah-detection-bi-lstm",
@@ -53,7 +53,7 @@ export default function PortfolioPage() {
       category: "Generative AI & Full-Stack",
       tags: ["LangChain", "ChromaDB", "Groq API", "Streamlit", "Docker", "Hugging Face Spaces"],
       impact: "Automated targeted knowledge extraction; fully containerized and publicly hosted on Hugging Face Spaces.",
-      link: "/portfolio/thesis-qa-rag-chatbot"
+      link: "https://github.com/wikan1602/thesis-chatbot"
     },
     {
       slug: "diabetes-prediction-hemodynamic",
@@ -71,7 +71,7 @@ export default function PortfolioPage() {
       category: "Computer Vision & Medical Imaging",
       tags: ["Python", "TensorFlow", "Keras", "CNN", "ImageDataGenerator", "Matplotlib"],
       impact: "Achieved 96.01% validation accuracy while maintaining high model generalization across distinct anatomical planes.",
-      link: "/portfolio/brain-tumor-mri-classification"
+      link: "https://github.com/wikan1602/brain-tumor-mri-classification"
     },
     {
       slug: "industrial-color-detection",
@@ -80,7 +80,7 @@ export default function PortfolioPage() {
       category: "Computer Vision & Automation",
       tags: ["Python", "OpenCV", "Poetry", "Docker", "CLI", "Feature Engineering"],
       impact: "Boosted accuracy from 75.2% to 92.7% by identifying and disabling destructive color-jittering data augmentations.",
-      link: "/portfolio/industrial-color-detection"
+      link: "https://github.com/wikan1602/ada-mata-mle-test"
     },
     {
       slug: "automated-cpr-ppg-feedback",
