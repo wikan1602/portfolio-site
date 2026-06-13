@@ -7,23 +7,23 @@ export default function ServicesPage() {
 
       <div className="max-w-5xl mx-auto space-y-12 z-10 relative">
         
-        {/* Header Halaman */}
+        {/* Page Header */}
         <div className="space-y-4">
           <a href="/" className="text-sm text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 font-mono">
-            ← Kembali ke Beranda
+            ← Back to Home
           </a>
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-            Layanan & Solusi Teknis
+            Services & Technical Solutions
           </h1>
           <p className="text-slate-400 max-w-2xl text-lg font-light">
-            Menjembatani infrastruktur bisnis dengan teknologi otomatisasi modern dan kecerdasan buatan untuk efisiensi operasional maksimal.
+            Bridging business infrastructure with modern automation technologies and artificial intelligence for maximum operational efficiency.
           </p>
         </div>
 
-        {/* Grid Dua Kategori Utama */}
+        {/* Grid of Two Core Categories */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
           
-          {/* Kategori 1: Automation & Scripting */}
+          {/* Category 1: Automation & Scripting */}
           <div className="bg-slate-900/60 border border-slate-800/80 p-8 rounded-2xl space-y-6 hover:border-slate-700 transition-all backdrop-blur-sm">
             <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
               <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,16 +34,16 @@ export default function ServicesPage() {
             <div className="space-y-2">
               <h2 className="text-2xl font-bold">Automation & Scripting</h2>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Membangun ekosistem data pipeline terintegrasi untuk mengeliminasi entri data manual yang repetitif dan rentan kesalahan.
+                Building integrated data pipeline ecosystems to eliminate repetitive and error-prone manual data entry tasks.
               </p>
             </div>
 
             <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Contoh Implementasi:</h3>
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Implementation Examples:</h3>
               <ul className="text-sm text-slate-300 space-y-2 list-disc list-inside">
-                <li>Otomatisasi ekstraksi dokumen invoice dari email langsung ke database internal.</li>
-                <li>Sinkronisasi data multi-platform via kustomisasi REST API Integration.</li>
-                <li>Migrasi alur kerja otomatisasi dari Zapier ke arsitektur mandiri.</li>
+                <li>Automated invoice document extraction from emails directly into internal databases.</li>
+                <li>Multi-platform data synchronization via custom REST API integration.</li>
+                <li>Workflow automation migration from Zapier to self-hosted architecture.</li>
               </ul>
             </div>
 
@@ -55,7 +55,7 @@ export default function ServicesPage() {
             </div>
           </div>
 
-          {/* Kategori 2: AI/LLM Integration */}
+          {/* Category 2: AI/LLM Integration */}
           <div className="bg-slate-900/60 border border-slate-800/80 p-8 rounded-2xl space-y-6 hover:border-slate-700 transition-all backdrop-blur-sm">
             <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
               <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,16 +66,16 @@ export default function ServicesPage() {
             <div className="space-y-2">
               <h2 className="text-2xl font-bold">AI & LLM Integration</h2>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Menyuntikkan kapabilitas kecerdasan buatan tingkat lanjut ke dalam sistem internal perusahaan dengan fokus penuh pada keamanan data privasi.
+                Injecting advanced artificial intelligence capabilities into internal corporate systems with a strict focus on data privacy security.
               </p>
             </div>
 
             <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Contoh Implementasi:</h3>
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Implementation Examples:</h3>
               <ul className="text-sm text-slate-300 space-y-2 list-disc list-inside">
-                <li>Arsitektur Retrieval-Augmented Generation (RAG) untuk pencarian dokumen pengetahuan internal.</li>
-                <li>Deployment Local LLM (seperti Qwen) secara on-premise untuk pemrosesan rekam medis sensitif.</li>
-                <li>Agen AI / Chatbot pintar yang terintegrasi ke sistem manajemen perusahaan.</li>
+                <li>Retrieval-Augmented Generation (RAG) architectures for searching internal knowledge bases.</li>
+                <li>On-premise deployment of Local LLMs (such as Qwen) for processing sensitive records safely.</li>
+                <li>Intelligent AI agents and chatbots integrated smoothly into corporate management systems.</li>
               </ul>
             </div>
 
@@ -89,30 +89,30 @@ export default function ServicesPage() {
 
         </div>
 
-        {/* Bagian Cara Kerja / Timeline Ringkas */}
+        {/* Process Workflow Section */}
         <div className="border border-slate-800 bg-slate-900/20 p-8 rounded-2xl space-y-6">
-          <h3 className="text-xl font-bold text-center">3 Langkah Kolaborasi</h3>
+          <h3 className="text-xl font-bold text-center">3 Steps of Collaboration</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center text-sm">
             <div className="space-y-2">
               <div className="text-blue-400 font-mono font-bold text-base">01. Discovery</div>
-              <p className="text-slate-400">Analisis mendalam mengenai bottlenecks alur kerja dan kebutuhan spesifik bisnis Anda.</p>
+              <p className="text-slate-400">Deep analysis of current workflow bottlenecks and your specific business requirements.</p>
             </div>
             <div className="space-y-2">
               <div className="text-purple-400 font-mono font-bold text-base">02. Build & Test</div>
-              <p className="text-slate-400">Pengembangan sistem secara iteratif dengan prioritas pada performa latensi rendah.</p>
+              <p className="text-slate-400">Iterative system development engineered with low-latency and performance as top priorities.</p>
             </div>
             <div className="space-y-2">
               <div className="text-emerald-400 font-mono font-bold text-base">03. Handover</div>
-              <p className="text-slate-400">Transfer teknologi, dokumentasi lengkap, dan deployment siap pakai di server Anda.</p>
+              <p className="text-slate-400">Knowledge transfer, comprehensive documentation, and production-ready deployment on your servers.</p>
             </div>
           </div>
         </div>
 
         {/* CTA Section */}
         <div className="text-center pt-4">
-          <p className="text-slate-400 text-sm mb-4">Punya kebutuhan integrasi custom atau masalah sistem yang ingin didiskusikan?</p>
+          <p className="text-slate-400 text-sm mb-4">Have custom integration needs or system bottlenecks you want to discuss?</p>
           <a href="/contact" className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-medium transition-colors">
-            Mulai Diskusi Proyek
+            Start Project Discussion
           </a>
         </div>
 
