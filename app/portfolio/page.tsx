@@ -2,6 +2,15 @@ export default function PortfolioPage() {
   // Production-grade engineering projects mapped from enterprise and biomedical records
   const projects = [
     {
+    slug: "enterprise-document-intelligence-system",
+    title: "Enterprise Multi-Format Document Intelligence & RAG Pipeline",
+    description: "Engineered a production-grade document processing and insight extraction engine featuring custom multi-format parsing pipelines, context-aware semantic chunking, vector search, and cross-encoder reranking.",
+    category: "Generative AI & Data Engineering",
+    tags: ["FastAPI", "Python", "Vector Search", "Reranker", "PostgreSQL", "Docker Compose"],
+    impact: "Automated structured text and table extraction from complex enterprise assets (PDF, DOCX, XLSX, PPTX) via a modular microservices architecture, minimizing retrieval noise and token overhead.",
+    link: "https://github.com/wikan1602/document-intelligence-system"
+  },
+    {
       slug: "cloud-api-to-local-inference",
       title: "Cloud API to Local Inference Migration for Cost & Latency Optimization",
       description: "Eliminated reliance on external third-party APIs by deploying a localized open-source model (Qwen) on private cloud infrastructure to securely process medical records.",
