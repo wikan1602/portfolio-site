@@ -14,8 +14,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://wikan-ai.my.id"),
   title: "Wikan | Automation & AI Specialist",
   description: "Portfolio & Services for Workflow Automation & AI/LLM Integration",
+  openGraph: {
+    title: "Wikan | Automation & AI Specialist",
+    description: "Portfolio & Services for Workflow Automation & AI/LLM Integration",
+    url: "https://wikan-ai.my.id",
+    siteName: "Wikan Portfolio",
+    images: [
+      {
+        url: "/og-image.png", // Mengarah ke public/og-image.png
+        width: 1200,
+        height: 630,
+        alt: "Wikan | Automation & AI Specialist Portfolio Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Wikan | Automation & AI Specialist",
+    description: "Portfolio & Services for Workflow Automation & AI/LLM Integration",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
