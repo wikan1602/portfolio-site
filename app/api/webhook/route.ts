@@ -1,19 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg'; // 1. Import pg pool untuk koneksi database
 
-// 💡 CARA PAMUNGKAS: Bedah URL secara murni agar parameter SSL bawaan cloud terbuang murni
-const dbUrl = new URL(process.env.DATABASE_URL || '');
+// Lazy pool: dibuat saat request pertama, BUKAN saat import module.
+// Kalau di-parse saat build (DATABASE_URL kosong), `new URL('')` akan throw
+// dan menggagalkan seluruh build. Menunda pembuatan pool mencegah itu.
+let pool: Pool | null = null;
 
-const pool = new Pool({
-  user: decodeURIComponent(dbUrl.username),
-  password: decodeURIComponent(dbUrl.password),
-  host: dbUrl.hostname,
-  port: parseInt(dbUrl.port || '5432', 10),
-  database: dbUrl.pathname.substring(1),
-  ssl: false, // Mutlak matikan SSL
-});
+function getPool(): Pool {
+  if (pool) return pool;
 
-const MY_VERIFY_TOKEN = process.env.MY_VERIFY_TOKEN || "One0969";
+  const raw = process.env.DATABASE_URL;
+  if (!raw) {
+    throw new Error('DATABASE_URL is not set');
+  }
+
+  // 💡 Bedah URL secara murni agar parameter SSL bawaan cloud terbuang murni
+  const dbUrl = new URL(raw);
+  pool = new Pool({
+    user: decodeURIComponent(dbUrl.username),
+    password: decodeURIComponent(dbUrl.password),
+    host: dbUrl.hostname,
+    port: parseInt(dbUrl.port || '5432', 10),
+    database: dbUrl.pathname.substring(1),
+    ssl: false, // Mutlak matikan SSL
+  });
+  return pool;
+}
+
+// Harus di-set lewat env var. JANGAN hardcode token di sini — file ini masuk git,
+// jadi token apa pun yang ditulis di sini otomatis bocor ke publik.
+const MY_VERIFY_TOKEN = process.env.MY_VERIFY_TOKEN;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const WA_ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
 
@@ -24,7 +40,7 @@ export async function GET(request: NextRequest) {
   const token = searchParams.get('hub.verify_token');
   const challenge = searchParams.get('hub.challenge');
 
-  if (mode === 'subscribe' && token === MY_VERIFY_TOKEN) {
+  if (mode === 'subscribe' && MY_VERIFY_TOKEN && token === MY_VERIFY_TOKEN) {
     return new NextResponse(challenge, {
       status: 200,
       headers: { 'Content-Type': 'text/plain' },
@@ -66,15 +82,17 @@ export async function POST(request: NextRequest) {
 // 🤖 FUNGSI LOGIKA BOT (PostgreSQL + Groq -> WhatsApp)
 async function handleChatbotLogic(userMessage: string, recipientPhone: string, phone_number_id: string) {
   try {
+    const db = getPool();
+
     // A. SIMPAN PESAN USER BARU KE DATABASE
-    await pool.query(
+    await db.query(
       'INSERT INTO wa_chat_history (phone_number, role, content) VALUES ($1, $2, $3)',
       [recipientPhone, 'user', userMessage]
     );
 
     // B. AMBIL 10 PESAN TERAKHIR (SLIDING WINDOW)
     // Mengambil riwayat percakapan terbaru sebanyak maksimal 10 baris
-    const dbResult = await pool.query(
+    const dbResult = await db.query(
       'SELECT role, content FROM wa_chat_history WHERE phone_number = $1 ORDER BY created_at DESC LIMIT 10',
       [recipientPhone]
     );
@@ -109,7 +127,7 @@ async function handleChatbotLogic(userMessage: string, recipientPhone: string, p
     const aiReply = groqData.choices?.[0]?.message?.content || "Maaf, aku sedang tidak bisa berpikir jernih.";
 
     // E. SIMPAN JAWABAN BOT KE DATABASE
-    await pool.query(
+    await db.query(
       'INSERT INTO wa_chat_history (phone_number, role, content) VALUES ($1, $2, $3)',
       [recipientPhone, 'assistant', aiReply]
     );

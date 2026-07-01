@@ -2,6 +2,15 @@ export default function PortfolioPage() {
   // Production-grade engineering projects mapped from enterprise and biomedical records
   const projects = [
     {
+      slug: "hospital-data-warehouse-cdc",
+      title: "Hospital Data Warehouse & CDC-Driven BI Pipeline",
+      description: "Designed and built a centralized data warehouse and BI pipeline for a healthcare provider — consolidating fragmented operational systems into a single source of truth and keeping it continuously synchronized via Change Data Capture (CDC).",
+      category: "Data Engineering & Business Intelligence",
+      tags: ["Data Warehouse", "ETL Pipeline", "CDC", "Star / Snowflake Schema", "Business Intelligence"],
+      impact: "Unified scattered hospital systems into one analytics-ready warehouse with dimensional (star/snowflake) modeling; CDC keeps it in near-real-time sync. Currently in pre-production, preparing for go-live.",
+      link: "/portfolio/hospital-data-warehouse-cdc"
+    },
+    {
     slug: "enterprise-document-intelligence-system",
     title: "Enterprise Multi-Format Document Intelligence & RAG Pipeline",
     description: "Engineered a production-grade document processing and insight extraction engine featuring custom multi-format parsing pipelines, context-aware semantic chunking, vector search, and cross-encoder reranking.",
@@ -91,15 +100,6 @@ export default function PortfolioPage() {
       impact: "Boosted accuracy from 75.2% to 92.7% by identifying and disabling destructive color-jittering data augmentations.",
       link: "https://github.com/wikan1602/ada-mata-mle-test"
     },
-    {
-      slug: "automated-cpr-ppg-feedback",
-      title: "Automated CPR Device with Integrated PPG Feedback Loop",
-      description: "Designed the electronic control systems and real-time pulse-detection algorithms using PPG sensor integration as an intelligent feedback trigger for automated mechanical CPR.",
-      category: "Biomedical Instrumentation & Embedded",
-      tags: ["Arduino Uno", "Pulse Sensor", "Signal Processing", "Electronic Design", "Embedded C++"],
-      impact: "Enables real-time blood-flow detection to automatically halt mechanical compressions upon pulse return, minimizing internal injury risks.",
-      link: "/portfolio/automated-cpr-ppg-feedback"
-    }
   ];
 
   return (

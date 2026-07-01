@@ -8,14 +8,6 @@ export default function BlogPage() {
       date: "May 31, 2026",
       readingTime: "5 min read",
       tags: ["n8n", "Python", "Architecture"]
-    },
-    {
-      slug: "local-llm-enterprise-deployment-strategy",
-      title: "Local LLM Deployment Strategies for Safeguarding Corporate Data Privacy",
-      description: "How startups and enterprises can leverage open-source models (such as Qwen) on internal servers without leaking sensitive data to third-party APIs.",
-      date: "May 25, 2026",
-      readingTime: "8 min read",
-      tags: ["LLM", "Security", "Private Cloud"]
     }
   ];
 
