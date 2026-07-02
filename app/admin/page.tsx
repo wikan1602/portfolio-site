@@ -12,6 +12,10 @@ export const dynamic = "force-dynamic";
 type Conversation = { phone_number: string; last_at: string; msg_count: number };
 type Message = { role: string; content: string; created_at: string };
 
+// This renders on the server (Vercel runs in UTC), so an explicit timeZone is
+// required or timestamps show as GMT+0. WIB = Asia/Jakarta (UTC+7).
+const TIME_ZONE = "Asia/Jakarta";
+
 function formatTime(value: string): string {
   const d = new Date(value);
   if (isNaN(d.getTime())) return "";
@@ -20,6 +24,7 @@ function formatTime(value: string): string {
     month: "short",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: TIME_ZONE,
   });
 }
 
