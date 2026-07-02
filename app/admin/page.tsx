@@ -4,6 +4,7 @@ import { getPool } from "@/app/lib/db";
 import { getMode, type ConversationMode } from "@/app/lib/conversation";
 import LogoutButton from "./LogoutButton";
 import ConversationActions from "./ConversationActions";
+import AutoRefresh from "./AutoRefresh";
 
 // Reads cookies + the database at request time — never prerender at build.
 export const dynamic = "force-dynamic";
@@ -76,11 +77,23 @@ export default async function AdminPage({
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 px-6 py-10">
       <div className="max-w-6xl mx-auto space-y-6">
+        {/* Auto-refresh keeps the view in sync without manual reloads.
+            Always on so a transient DB error self-heals without a manual reload. */}
+        <AutoRefresh />
+
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">WhatsApp Chat History</h1>
-            <p className="text-sm text-slate-500">Read-only view of bot conversations.</p>
+            <p className="text-sm text-slate-500 flex items-center gap-2">
+              {!dbError && (
+                <span className="inline-flex items-center gap-1.5 text-emerald-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live
+                </span>
+              )}
+              <span>Auto-updating every 5s.</span>
+            </p>
           </div>
           <LogoutButton />
         </div>
