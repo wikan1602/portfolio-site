@@ -66,6 +66,8 @@ export async function POST(request: NextRequest) {
       if (message.type === 'text') {
         // Jalankan logika chatbot yang sekarang sudah dibekali memori database
         await handleChatbotLogic(message.text.body, from, phone_number_id, message.id);
+      } else if (message.type === 'reaction') {
+        // Reaction masuk dari customer: abaikan (jangan bikin baris "[reaction]").
       } else {
         // Pesan non-teks (foto/sticker/video/audio/dokumen): simpan agar tampil
         // di /admin. Bot tidak membalas media — biarkan manusia yang menangani.

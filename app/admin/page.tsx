@@ -17,6 +17,7 @@ type Message = {
   media_type: string | null;
   media_id: string | null;
   wa_message_id: string | null;
+  reaction: string | null;
 };
 
 // This renders on the server (Vercel runs in UTC), so an explicit timeZone is
@@ -65,7 +66,7 @@ export default async function AdminPage({
     if (phone) {
       messages = (
         await pool.query(
-          `SELECT role, content, created_at, media_type, media_id, wa_message_id
+          `SELECT role, content, created_at, media_type, media_id, wa_message_id, reaction
            FROM wa_chat_history
            WHERE phone_number = $1
            ORDER BY created_at ASC`,
@@ -174,6 +175,7 @@ export default async function AdminPage({
                       mediaType: m.media_type,
                       mediaId: m.media_id,
                       wamid: m.wa_message_id,
+                      reaction: m.reaction,
                     }))}
                   />
                 </>

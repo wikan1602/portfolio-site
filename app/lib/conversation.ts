@@ -27,7 +27,8 @@ export async function ensureChatHistoryColumns(pool: Pool): Promise<void> {
     `ALTER TABLE wa_chat_history
        ADD COLUMN IF NOT EXISTS media_type    TEXT,
        ADD COLUMN IF NOT EXISTS media_id      TEXT,
-       ADD COLUMN IF NOT EXISTS wa_message_id TEXT`
+       ADD COLUMN IF NOT EXISTS wa_message_id TEXT,
+       ADD COLUMN IF NOT EXISTS reaction      TEXT`
   );
   columnsEnsured = true;
 }

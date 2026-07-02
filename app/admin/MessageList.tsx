@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export type RenderedMessage = {
   content: string;
@@ -9,6 +10,7 @@ export type RenderedMessage = {
   mediaType?: string | null;
   mediaId?: string | null;
   wamid?: string | null;
+  reaction?: string | null;
 };
 
 const QUICK_EMOJIS = ["👍", "❤️", "😂", "🙏", "🔥"];
@@ -26,16 +28,18 @@ function MessageActions({
 }) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const router = useRouter();
 
   async function react(emoji: string) {
     setBusy(true);
-    await fetch("/api/admin/react", {
+    const res = await fetch("/api/admin/react", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ phone, messageId: message.wamid, emoji }),
-    }).catch(() => {});
+    }).catch(() => null);
     setBusy(false);
     setOpen(false);
+    if (res && res.ok) router.refresh();
   }
 
   return (
@@ -169,6 +173,16 @@ export default function MessageList({
             {!(m.mediaType && m.content === `[${m.mediaType}]`) && (
               <div className="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
                 {m.content}
+              </div>
+            )}
+            {m.reaction && (
+              <div className="mt-1.5">
+                <span
+                  className="inline-flex items-center gap-1 text-xs bg-slate-950/70 border border-slate-700 rounded-full px-2 py-0.5"
+                  title="Reaction you sent"
+                >
+                  {m.reaction} <span className="text-[9px] text-slate-500">you</span>
+                </span>
               </div>
             )}
             {m.wamid && <MessageActions phone={phone} message={m} onReply={onReply} />}

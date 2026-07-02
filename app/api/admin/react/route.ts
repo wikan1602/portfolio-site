@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from '@/app/lib/auth';
 import { getPool } from '@/app/lib/db';
-import { getPhoneNumberId } from '@/app/lib/conversation';
+import { getPhoneNumberId, ensureChatHistoryColumns } from '@/app/lib/conversation';
 
 const WA_ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
 
@@ -49,6 +49,18 @@ export async function POST(request: NextRequest) {
   if (!waRes.ok) {
     const detail = waData?.error?.message || 'WhatsApp API rejected the reaction.';
     return NextResponse.json({ error: detail }, { status: 502 });
+  }
+
+  // Record the reaction on the target message so it shows in the thread.
+  // Empty emoji means the reaction was removed -> clear it (NULL).
+  try {
+    await ensureChatHistoryColumns(pool);
+    await pool.query(
+      'UPDATE wa_chat_history SET reaction = $1 WHERE phone_number = $2 AND wa_message_id = $3',
+      [emoji || null, phone, messageId]
+    );
+  } catch {
+    // Reaction was sent; a logging failure shouldn't fail the request.
   }
 
   return NextResponse.json({ ok: true });
