@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/app/lib/auth";
 import { getPool } from "@/app/lib/db";
-import { getMode, type ConversationMode } from "@/app/lib/conversation";
+import { getMode, ensureChatHistoryMedia, type ConversationMode } from "@/app/lib/conversation";
 import LogoutButton from "./LogoutButton";
 import ConversationActions from "./ConversationActions";
 import AutoRefresh from "./AutoRefresh";
@@ -11,7 +11,13 @@ import MessageList from "./MessageList";
 export const dynamic = "force-dynamic";
 
 type Conversation = { phone_number: string; last_at: string; msg_count: number };
-type Message = { role: string; content: string; created_at: string };
+type Message = {
+  role: string;
+  content: string;
+  created_at: string;
+  media_type: string | null;
+  media_id: string | null;
+};
 
 // This renders on the server (Vercel runs in UTC), so an explicit timeZone is
 // required or timestamps show as GMT+0. WIB = Asia/Jakarta (UTC+7).
@@ -46,6 +52,7 @@ export default async function AdminPage({
 
   try {
     const pool = getPool();
+    await ensureChatHistoryMedia(pool); // media_type/media_id columns must exist for the SELECT below
     conversations = (
       await pool.query(
         `SELECT phone_number, MAX(created_at) AS last_at, COUNT(*)::int AS msg_count
@@ -58,7 +65,7 @@ export default async function AdminPage({
     if (phone) {
       messages = (
         await pool.query(
-          `SELECT role, content, created_at
+          `SELECT role, content, created_at, media_type, media_id
            FROM wa_chat_history
            WHERE phone_number = $1
            ORDER BY created_at ASC`,
@@ -164,6 +171,8 @@ export default async function AdminPage({
                       content: m.content,
                       time: formatTime(m.created_at),
                       isBot: m.role === "assistant",
+                      mediaType: m.media_type,
+                      mediaId: m.media_id,
                     }))}
                   />
                 </>

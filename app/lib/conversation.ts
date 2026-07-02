@@ -16,6 +16,19 @@ export async function ensureStateTable(pool: Pool): Promise<void> {
   await pool.query(DDL);
 }
 
+// Adds nullable media columns to the existing wa_chat_history table so inbound
+// photos/stickers/etc. can be recorded. Idempotent + cached per process.
+let mediaColumnsEnsured = false;
+export async function ensureChatHistoryMedia(pool: Pool): Promise<void> {
+  if (mediaColumnsEnsured) return;
+  await pool.query(
+    `ALTER TABLE wa_chat_history
+       ADD COLUMN IF NOT EXISTS media_type TEXT,
+       ADD COLUMN IF NOT EXISTS media_id   TEXT`
+  );
+  mediaColumnsEnsured = true;
+}
+
 // Called on every inbound message: keep the freshest phone_number_id for the
 // conversation (needed to send manual replies later) without touching mode.
 export async function touchConversation(

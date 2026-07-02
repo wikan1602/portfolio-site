@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg'; // 1. Import pg pool untuk koneksi database
-import { touchConversation, getMode } from '@/app/lib/conversation';
+import { touchConversation, getMode, ensureChatHistoryMedia } from '@/app/lib/conversation';
 
 // Lazy pool: dibuat saat request pertama, BUKAN saat import module.
 // Kalau di-parse saat build (DATABASE_URL kosong), `new URL('')` akan throw
@@ -63,12 +63,13 @@ export async function POST(request: NextRequest) {
       const phone_number_id = messageData.metadata.phone_number_id;
       const from = message.from; // Nomor HP user
 
-      // Hanya proses jika tipenya teks
       if (message.type === 'text') {
-        const userMessage = message.text.body;
-
         // Jalankan logika chatbot yang sekarang sudah dibekali memori database
-        await handleChatbotLogic(userMessage, from, phone_number_id);
+        await handleChatbotLogic(message.text.body, from, phone_number_id);
+      } else {
+        // Pesan non-teks (foto/sticker/video/audio/dokumen): simpan agar tampil
+        // di /admin. Bot tidak membalas media — biarkan manusia yang menangani.
+        await storeIncomingMedia(from, message, phone_number_id);
       }
     }
 
@@ -77,6 +78,34 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error saat menerima webhook:', error);
     return NextResponse.json({ status: 'ERROR' }, { status: 200 });
+  }
+}
+
+// 📎 SIMPAN MEDIA MASUK (foto/sticker/video/audio/dokumen)
+// Menyimpan media_id + tipe agar /admin bisa menampilkannya lewat proxy.
+// Media Meta hanya bisa diambil pakai access token, jadi cukup simpan id-nya.
+async function storeIncomingMedia(
+  recipientPhone: string,
+  message: { type: string; [key: string]: unknown },
+  phone_number_id: string
+) {
+  try {
+    const db = getPool();
+    const type = message.type;
+    const media = (message[type] as { id?: string; caption?: string } | undefined) || {};
+    const mediaId = media.id ?? null;
+    const caption = media.caption ?? '';
+    // Teks fallback yang tersimpan (dipakai konteks Groq & sebagai label).
+    const content = caption || `[${type}]`;
+
+    await ensureChatHistoryMedia(db);
+    await db.query(
+      'INSERT INTO wa_chat_history (phone_number, role, content, media_type, media_id) VALUES ($1, $2, $3, $4, $5)',
+      [recipientPhone, 'user', content, mediaId ? type : null, mediaId]
+    );
+    await touchConversation(db, recipientPhone, phone_number_id);
+  } catch (err) {
+    console.error('Gagal menyimpan media masuk:', err);
   }
 }
 

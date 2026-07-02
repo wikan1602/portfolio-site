@@ -6,7 +6,36 @@ export type RenderedMessage = {
   content: string;
   time: string;
   isBot: boolean;
+  mediaType?: string | null;
+  mediaId?: string | null;
 };
+
+// Renders inbound media via the auth-protected proxy. Images/stickers show
+// inline; audio/video get players; documents show a download link. A text
+// caption (anything that isn't the "[type]" placeholder) is shown below.
+function MediaBlock({ type, id }: { type: string; id: string }) {
+  const src = `/api/admin/media/${id}`;
+  if (type === "image" || type === "sticker") {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={type} className="rounded-lg max-w-full max-h-72 object-contain" />;
+  }
+  if (type === "video") {
+    return <video src={src} controls className="rounded-lg max-w-full max-h-72" />;
+  }
+  if (type === "audio") {
+    return <audio src={src} controls className="w-full" />;
+  }
+  return (
+    <a
+      href={src}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 text-sm text-blue-300 hover:text-blue-200 underline"
+    >
+      📎 Open {type}
+    </a>
+  );
+}
 
 export default function MessageList({ messages }: { messages: RenderedMessage[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -58,9 +87,17 @@ export default function MessageList({ messages }: { messages: RenderedMessage[] 
             <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
               {m.isBot ? "Bot" : "Customer"} · {m.time}
             </div>
-            <div className="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
-              {m.content}
-            </div>
+            {m.mediaType && m.mediaId && (
+              <div className="mb-1">
+                <MediaBlock type={m.mediaType} id={m.mediaId} />
+              </div>
+            )}
+            {/* Show text unless it's just the "[type]" placeholder for a media message */}
+            {!(m.mediaType && m.content === `[${m.mediaType}]`) && (
+              <div className="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
+                {m.content}
+              </div>
+            )}
           </div>
         </div>
       ))}
