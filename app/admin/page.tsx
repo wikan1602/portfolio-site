@@ -5,6 +5,7 @@ import { getMode, type ConversationMode } from "@/app/lib/conversation";
 import LogoutButton from "./LogoutButton";
 import ConversationActions from "./ConversationActions";
 import AutoRefresh from "./AutoRefresh";
+import MessageList from "./MessageList";
 
 // Reads cookies + the database at request time — never prerender at build.
 export const dynamic = "force-dynamic";
@@ -144,43 +145,27 @@ export default async function AdminPage({
             </aside>
 
             {/* Message thread */}
-            <section className="bg-slate-900/30 border border-slate-800/60 rounded-2xl p-5 min-h-[60vh]">
+            <section className="bg-slate-900/30 border border-slate-800/60 rounded-2xl p-5 h-[75vh] flex flex-col">
               {!phone && (
                 <p className="text-sm text-slate-600">Select a conversation to view its messages.</p>
               )}
 
               {phone && (
                 <>
-                  <div className="text-sm font-mono text-slate-400 border-b border-slate-800 pb-3 mb-4">
+                  <div className="text-sm font-mono text-slate-400 border-b border-slate-800 pb-3 mb-4 shrink-0">
                     {phone}
                   </div>
-                  <ConversationActions phone={phone} mode={mode} within24h={within24h} />
-                  <div className="space-y-4">
-                    {messages.length === 0 && (
-                      <p className="text-sm text-slate-600">No messages in this conversation.</p>
-                    )}
-                    {messages.map((m, i) => {
-                      const isBot = m.role === "assistant";
-                      return (
-                        <div key={i} className={`flex ${isBot ? "justify-end" : "justify-start"}`}>
-                          <div
-                            className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
-                              isBot
-                                ? "bg-blue-600/20 border border-blue-800/50"
-                                : "bg-slate-800/60 border border-slate-700/50"
-                            }`}
-                          >
-                            <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
-                              {isBot ? "Bot" : "Customer"} · {formatTime(m.created_at)}
-                            </div>
-                            <div className="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
-                              {m.content}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                  <div className="shrink-0">
+                    <ConversationActions phone={phone} mode={mode} within24h={within24h} />
                   </div>
+                  <MessageList
+                    key={phone}
+                    messages={messages.map((m) => ({
+                      content: m.content,
+                      time: formatTime(m.created_at),
+                      isBot: m.role === "assistant",
+                    }))}
+                  />
                 </>
               )}
             </section>
