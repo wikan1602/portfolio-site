@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/app/lib/auth";
 import { getPool } from "@/app/lib/db";
+import { getMode, type ConversationMode } from "@/app/lib/conversation";
 import LogoutButton from "./LogoutButton";
+import ConversationActions from "./ConversationActions";
 
 // Reads cookies + the database at request time — never prerender at build.
 export const dynamic = "force-dynamic";
@@ -31,6 +33,8 @@ export default async function AdminPage({
 
   let conversations: Conversation[] = [];
   let messages: Message[] = [];
+  let mode: ConversationMode = "bot";
+  let within24h = true;
   let dbError: string | null = null;
 
   try {
@@ -54,6 +58,16 @@ export default async function AdminPage({
           [phone]
         )
       ).rows as Message[];
+
+      mode = await getMode(pool, phone);
+
+      // 24-hour customer-service window is measured from the last inbound message.
+      const lastInbound = [...messages].reverse().find((m) => m.role === "user");
+      if (lastInbound) {
+        within24h = Date.now() - new Date(lastInbound.created_at).getTime() < 24 * 60 * 60 * 1000;
+      } else {
+        within24h = false;
+      }
     }
   } catch (err) {
     dbError = err instanceof Error ? err.message : "Failed to load data.";
@@ -122,6 +136,7 @@ export default async function AdminPage({
                   <div className="text-sm font-mono text-slate-400 border-b border-slate-800 pb-3 mb-4">
                     {phone}
                   </div>
+                  <ConversationActions phone={phone} mode={mode} within24h={within24h} />
                   <div className="space-y-4">
                     {messages.length === 0 && (
                       <p className="text-sm text-slate-600">No messages in this conversation.</p>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg'; // 1. Import pg pool untuk koneksi database
+import { touchConversation, getMode } from '@/app/lib/conversation';
 
 // Lazy pool: dibuat saat request pertama, BUKAN saat import module.
 // Kalau di-parse saat build (DATABASE_URL kosong), `new URL('')` akan throw
@@ -89,6 +90,16 @@ async function handleChatbotLogic(userMessage: string, recipientPhone: string, p
       'INSERT INTO wa_chat_history (phone_number, role, content) VALUES ($1, $2, $3)',
       [recipientPhone, 'user', userMessage]
     );
+
+    // A2. HUMAN TAKEOVER GATE
+    // Catat phone_number_id terbaru (dipakai admin untuk balas manual), lalu cek
+    // mode percakapan. Kalau 'human', pesan sudah tersimpan di atas — bot berhenti
+    // di sini dan biarkan manusia yang balas dari /admin. Kalau error/tabel belum
+    // ada, getMode() default ke 'bot' sehingga perilaku persis seperti sebelumnya.
+    await touchConversation(db, recipientPhone, phone_number_id);
+    if ((await getMode(db, recipientPhone)) === 'human') {
+      return;
+    }
 
     // B. AMBIL 10 PESAN TERAKHIR (SLIDING WINDOW)
     // Mengambil riwayat percakapan terbaru sebanyak maksimal 10 baris
