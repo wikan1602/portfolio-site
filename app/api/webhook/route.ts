@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg'; // 1. Import pg pool untuk koneksi database
-import { touchConversation, getMode, ensureChatHistoryMedia } from '@/app/lib/conversation';
+import { touchConversation, getMode, ensureChatHistoryColumns } from '@/app/lib/conversation';
 
 // Lazy pool: dibuat saat request pertama, BUKAN saat import module.
 // Kalau di-parse saat build (DATABASE_URL kosong), `new URL('')` akan throw
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
 
       if (message.type === 'text') {
         // Jalankan logika chatbot yang sekarang sudah dibekali memori database
-        await handleChatbotLogic(message.text.body, from, phone_number_id);
+        await handleChatbotLogic(message.text.body, from, phone_number_id, message.id);
       } else {
         // Pesan non-teks (foto/sticker/video/audio/dokumen): simpan agar tampil
         // di /admin. Bot tidak membalas media — biarkan manusia yang menangani.
@@ -97,11 +97,12 @@ async function storeIncomingMedia(
     const caption = media.caption ?? '';
     // Teks fallback yang tersimpan (dipakai konteks Groq & sebagai label).
     const content = caption || `[${type}]`;
+    const waMessageId = (message.id as string) ?? null;
 
-    await ensureChatHistoryMedia(db);
+    await ensureChatHistoryColumns(db);
     await db.query(
-      'INSERT INTO wa_chat_history (phone_number, role, content, media_type, media_id) VALUES ($1, $2, $3, $4, $5)',
-      [recipientPhone, 'user', content, mediaId ? type : null, mediaId]
+      'INSERT INTO wa_chat_history (phone_number, role, content, media_type, media_id, wa_message_id) VALUES ($1, $2, $3, $4, $5, $6)',
+      [recipientPhone, 'user', content, mediaId ? type : null, mediaId, waMessageId]
     );
     await touchConversation(db, recipientPhone, phone_number_id);
   } catch (err) {
@@ -110,14 +111,20 @@ async function storeIncomingMedia(
 }
 
 // 🤖 FUNGSI LOGIKA BOT (PostgreSQL + Groq -> WhatsApp)
-async function handleChatbotLogic(userMessage: string, recipientPhone: string, phone_number_id: string) {
+async function handleChatbotLogic(
+  userMessage: string,
+  recipientPhone: string,
+  phone_number_id: string,
+  waMessageId: string | null = null
+) {
   try {
     const db = getPool();
 
-    // A. SIMPAN PESAN USER BARU KE DATABASE
+    // A. SIMPAN PESAN USER BARU KE DATABASE (+ wamid untuk reply/react)
+    await ensureChatHistoryColumns(db);
     await db.query(
-      'INSERT INTO wa_chat_history (phone_number, role, content) VALUES ($1, $2, $3)',
-      [recipientPhone, 'user', userMessage]
+      'INSERT INTO wa_chat_history (phone_number, role, content, wa_message_id) VALUES ($1, $2, $3, $4)',
+      [recipientPhone, 'user', userMessage, waMessageId]
     );
 
     // A2. HUMAN TAKEOVER GATE

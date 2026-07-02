@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type RenderedMessage = {
   content: string;
@@ -8,7 +8,72 @@ export type RenderedMessage = {
   isBot: boolean;
   mediaType?: string | null;
   mediaId?: string | null;
+  wamid?: string | null;
 };
+
+const QUICK_EMOJIS = ["👍", "❤️", "😂", "🙏", "🔥"];
+
+// Per-message Reply + React controls. Reply hands the target up to the composer;
+// React sends an emoji reaction immediately via the API.
+function MessageActions({
+  phone,
+  message,
+  onReply,
+}: {
+  phone: string;
+  message: RenderedMessage;
+  onReply?: (m: RenderedMessage) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  async function react(emoji: string) {
+    setBusy(true);
+    await fetch("/api/admin/react", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone, messageId: message.wamid, emoji }),
+    }).catch(() => {});
+    setBusy(false);
+    setOpen(false);
+  }
+
+  return (
+    <div className="flex items-center gap-3 mt-1.5">
+      <button
+        type="button"
+        onClick={() => onReply?.(message)}
+        className="text-[10px] text-slate-500 hover:text-slate-300 transition-colors"
+      >
+        ↩ Reply
+      </button>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className="text-[10px] text-slate-500 hover:text-slate-300 transition-colors"
+        >
+          😀 React
+        </button>
+        {open && (
+          <div className="absolute z-10 bottom-full mb-1 flex gap-1 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 shadow-lg">
+            {QUICK_EMOJIS.map((e) => (
+              <button
+                key={e}
+                type="button"
+                disabled={busy}
+                onClick={() => react(e)}
+                className="text-sm hover:scale-125 transition-transform disabled:opacity-50"
+              >
+                {e}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 // Renders inbound media via the auth-protected proxy. Images/stickers show
 // inline; audio/video get players; documents show a download link. A text
@@ -37,7 +102,15 @@ function MediaBlock({ type, id }: { type: string; id: string }) {
   );
 }
 
-export default function MessageList({ messages }: { messages: RenderedMessage[] }) {
+export default function MessageList({
+  messages,
+  phone,
+  onReply,
+}: {
+  messages: RenderedMessage[];
+  phone: string;
+  onReply?: (m: RenderedMessage) => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   // Whether the user is parked near the bottom. Starts true so a freshly
   // opened conversation lands on the newest message.
@@ -98,6 +171,7 @@ export default function MessageList({ messages }: { messages: RenderedMessage[] 
                 {m.content}
               </div>
             )}
+            {m.wamid && <MessageActions phone={phone} message={m} onReply={onReply} />}
           </div>
         </div>
       ))}

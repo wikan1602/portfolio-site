@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from '@/app/lib/auth';
 import { getPool } from '@/app/lib/db';
-import { getPhoneNumberId } from '@/app/lib/conversation';
+import { getPhoneNumberId, ensureChatHistoryColumns } from '@/app/lib/conversation';
 
 const WA_ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
 
@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));
   const phone = typeof body.phone === 'string' ? body.phone : '';
   const message = typeof body.message === 'string' ? body.message.trim() : '';
+  const replyTo = typeof body.replyTo === 'string' && body.replyTo ? body.replyTo : null;
 
   if (!phone || !message) {
     return NextResponse.json({ error: 'Missing phone or message' }, { status: 400 });
@@ -47,6 +48,7 @@ export async function POST(request: NextRequest) {
       to: phone,
       type: 'text',
       text: { preview_url: false, body: message },
+      ...(replyTo ? { context: { message_id: replyTo } } : {}),
     }),
   });
 
@@ -58,10 +60,12 @@ export async function POST(request: NextRequest) {
 
   // Log the human reply so it shows in history and stays in the bot's context
   // (role 'assistant') if the conversation is handed back to the bot later.
+  const outgoingId: string | null = waData?.messages?.[0]?.id ?? null;
   try {
+    await ensureChatHistoryColumns(pool);
     await pool.query(
-      'INSERT INTO wa_chat_history (phone_number, role, content) VALUES ($1, $2, $3)',
-      [phone, 'assistant', message]
+      'INSERT INTO wa_chat_history (phone_number, role, content, wa_message_id) VALUES ($1, $2, $3, $4)',
+      [phone, 'assistant', message, outgoingId]
     );
   } catch {
     // Message was sent successfully; a logging failure shouldn't fail the request.

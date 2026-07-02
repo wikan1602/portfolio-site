@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/app/lib/auth";
 import { getPool } from "@/app/lib/db";
-import { getMode, ensureChatHistoryMedia, type ConversationMode } from "@/app/lib/conversation";
+import { getMode, ensureChatHistoryColumns, type ConversationMode } from "@/app/lib/conversation";
 import LogoutButton from "./LogoutButton";
-import ConversationActions from "./ConversationActions";
 import AutoRefresh from "./AutoRefresh";
-import MessageList from "./MessageList";
+import ChatPanel from "./ChatPanel";
 
 // Reads cookies + the database at request time — never prerender at build.
 export const dynamic = "force-dynamic";
@@ -17,6 +16,7 @@ type Message = {
   created_at: string;
   media_type: string | null;
   media_id: string | null;
+  wa_message_id: string | null;
 };
 
 // This renders on the server (Vercel runs in UTC), so an explicit timeZone is
@@ -52,7 +52,7 @@ export default async function AdminPage({
 
   try {
     const pool = getPool();
-    await ensureChatHistoryMedia(pool); // media_type/media_id columns must exist for the SELECT below
+    await ensureChatHistoryColumns(pool); // media + wa_message_id columns must exist for the SELECT below
     conversations = (
       await pool.query(
         `SELECT phone_number, MAX(created_at) AS last_at, COUNT(*)::int AS msg_count
@@ -65,7 +65,7 @@ export default async function AdminPage({
     if (phone) {
       messages = (
         await pool.query(
-          `SELECT role, content, created_at, media_type, media_id
+          `SELECT role, content, created_at, media_type, media_id, wa_message_id
            FROM wa_chat_history
            WHERE phone_number = $1
            ORDER BY created_at ASC`,
@@ -162,17 +162,18 @@ export default async function AdminPage({
                   <div className="text-sm font-mono text-slate-400 border-b border-slate-800 pb-3 mb-4 shrink-0">
                     {phone}
                   </div>
-                  <div className="shrink-0">
-                    <ConversationActions phone={phone} mode={mode} within24h={within24h} />
-                  </div>
-                  <MessageList
+                  <ChatPanel
                     key={phone}
+                    phone={phone}
+                    mode={mode}
+                    within24h={within24h}
                     messages={messages.map((m) => ({
                       content: m.content,
                       time: formatTime(m.created_at),
                       isBot: m.role === "assistant",
                       mediaType: m.media_type,
                       mediaId: m.media_id,
+                      wamid: m.wa_message_id,
                     }))}
                   />
                 </>
