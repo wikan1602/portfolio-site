@@ -20,7 +20,7 @@ export function SiteFooter() {
   if (isAdminRoute(pathname)) return null;
 
   return (
-    <footer className="w-full border-t border-slate-900 bg-slate-950 py-8 text-center text-xs text-slate-500 font-mono">
+    <footer className="w-full border-t border-border bg-bg py-8 text-center text-xs text-subtle font-mono">
       <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           © {new Date().getFullYear()} wikan-ai.my.id. All rights reserved.
@@ -30,7 +30,7 @@ export function SiteFooter() {
             href="https://github.com/wikan1602"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-slate-300 transition-colors"
+            className="hover:text-fg transition-colors"
           >
             GitHub
           </a>
@@ -38,7 +38,7 @@ export function SiteFooter() {
             href="https://linkedin.com/in/wikan-priambudi"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-slate-300 transition-colors"
+            className="hover:text-fg transition-colors"
           >
             LinkedIn
           </a>

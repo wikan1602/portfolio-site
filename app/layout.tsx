@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteNavbar, SiteFooter } from "@/components/SiteChrome";
+import ThemeProvider from "@/components/ThemeProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -47,20 +48,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-slate-100 min-h-screen flex flex-col`}>
-        
-        {/* Public nav — hidden on /admin */}
-        <SiteNavbar />
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-bg text-fg min-h-screen flex flex-col`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 
-        {/* PAGE CONTENT */}
-        <div className="flex-grow">
-          {children}
-        </div>
+          {/* Public nav — hidden on /admin */}
+          <SiteNavbar />
 
-        {/* Public footer — hidden on /admin */}
-        <SiteFooter />
+          {/* PAGE CONTENT */}
+          <div className="flex-grow">
+            {children}
+          </div>
 
+          {/* Public footer — hidden on /admin */}
+          <SiteFooter />
+
+        </ThemeProvider>
       </body>
     </html>
   );

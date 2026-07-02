@@ -97,7 +97,7 @@ export default async function ArticlePage({
   if (!article) notFound();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-20 px-6 relative overflow-hidden">
+    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 blur-[150px] rounded-full pointer-events-none" />
 
@@ -110,7 +110,7 @@ export default async function ArticlePage({
           >
             ← Back to Blog
           </a>
-          <div className="flex items-center gap-3 text-xs font-mono text-slate-500">
+          <div className="flex items-center gap-3 text-xs font-mono text-subtle">
             <span>{article.date}</span>
             <span>•</span>
             <span>{article.readingTime}</span>
@@ -122,7 +122,7 @@ export default async function ArticlePage({
             {article.tags.map((tag) => (
               <span
                 key={tag}
-                className="bg-slate-950 text-slate-500 text-[10px] font-mono px-2 py-0.5 rounded border border-slate-900"
+                className="bg-bg text-subtle text-[10px] font-mono px-2 py-0.5 rounded border border-border"
               >
                 #{tag}
               </span>
@@ -135,17 +135,17 @@ export default async function ArticlePage({
           {article.body.map((section, i) => (
             <section key={i} className="space-y-3">
               {section.heading && (
-                <h2 className="text-xl font-bold text-slate-100 pt-2">{section.heading}</h2>
+                <h2 className="text-xl font-bold text-fg pt-2">{section.heading}</h2>
               )}
               {section.paragraphs.map((p, pi) => (
-                <p key={pi} className="text-slate-300 leading-relaxed font-light">
+                <p key={pi} className="text-fg leading-relaxed font-light">
                   {p}
                 </p>
               ))}
               {section.bullets && (
                 <ul className="space-y-2 pt-1">
                   {section.bullets.map((b, bi) => (
-                    <li key={bi} className="text-slate-400 text-sm leading-relaxed flex gap-2.5">
+                    <li key={bi} className="text-muted text-sm leading-relaxed flex gap-2.5">
                       <span className="text-purple-400 shrink-0">→</span>
                       <span>{b}</span>
                     </li>
@@ -157,8 +157,8 @@ export default async function ArticlePage({
         </div>
 
         {/* CTA */}
-        <div className="border-t border-slate-900 pt-8 text-center space-y-4">
-          <p className="text-slate-400 text-sm">
+        <div className="border-t border-border pt-8 text-center space-y-4">
+          <p className="text-muted text-sm">
             Want to automate a process without the maintenance headache?
           </p>
           <a

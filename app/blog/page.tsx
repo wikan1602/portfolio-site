@@ -12,7 +12,7 @@ export default function BlogPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-20 px-6 relative overflow-hidden">
+    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
       
       {/* Background Glow */}
       <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-purple-500/5 blur-[150px] rounded-full pointer-events-none" />
@@ -24,7 +24,7 @@ export default function BlogPage() {
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
             Technical Blog
           </h1>
-          <p className="text-slate-400 text-lg font-light">
+          <p className="text-muted text-lg font-light">
             Sharing insights, tutorials, and architectural notes covering workflow automation, AI integration, and software engineering.
           </p>
         </div>
@@ -34,31 +34,31 @@ export default function BlogPage() {
           {articles.map((article, index) => (
             <article 
               key={index} 
-              className="p-6 rounded-2xl bg-slate-900/30 border border-slate-900 hover:border-slate-800 hover:bg-slate-900/50 transition-all group cursor-pointer"
+              className="p-6 rounded-2xl bg-surface/30 border border-border hover:border-border hover:bg-surface/50 transition-all group cursor-pointer"
             >
               <a href={`/blog/${article.slug}`} className="block space-y-3">
                 
                 {/* Meta: Date & Reading Time Estimate */}
-                <div className="flex items-center gap-3 text-xs font-mono text-slate-500">
+                <div className="flex items-center gap-3 text-xs font-mono text-subtle">
                   <span>{article.date}</span>
                   <span>•</span>
                   <span>{article.readingTime}</span>
                 </div>
 
                 {/* Article Title */}
-                <h2 className="text-xl font-bold text-slate-200 group-hover:text-blue-400 transition-colors">
+                <h2 className="text-xl font-bold text-fg group-hover:text-blue-400 transition-colors">
                   {article.title}
                 </h2> 
 
                 {/* Brief Description */}
-                <p className="text-slate-400 text-sm font-light leading-relaxed">
+                <p className="text-muted text-sm font-light leading-relaxed">
                   {article.description}
                 </p>
 
                 {/* Badges / Tags */}
                 <div className="flex flex-wrap gap-2 pt-1">
                   {article.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="bg-slate-950 text-slate-500 text-[10px] font-mono px-2 py-0.5 rounded border border-slate-900">
+                    <span key={tIdx} className="bg-bg text-subtle text-[10px] font-mono px-2 py-0.5 rounded border border-border">
                       #{tag}
                     </span>
                   ))}

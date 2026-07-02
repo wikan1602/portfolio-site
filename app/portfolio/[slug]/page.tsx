@@ -190,7 +190,7 @@ export default async function CaseStudyPage({
   if (!study) notFound();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-20 px-6 relative overflow-hidden">
+    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none" />
 
@@ -206,7 +206,7 @@ export default async function CaseStudyPage({
           <span className="block text-xs font-mono font-medium text-blue-400 uppercase tracking-wider">
             {study.category}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-fg">
             {study.title}
           </h1>
           <div className="inline-flex items-center gap-2 bg-emerald-950/30 border border-emerald-900/40 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-400">
@@ -216,7 +216,7 @@ export default async function CaseStudyPage({
             {study.tags.map((tag) => (
               <span
                 key={tag}
-                className="bg-slate-900 text-slate-400 text-xs px-2.5 py-1 rounded-md font-mono border border-slate-800"
+                className="bg-surface text-muted text-xs px-2.5 py-1 rounded-md font-mono border border-border"
               >
                 {tag}
               </span>
@@ -226,25 +226,25 @@ export default async function CaseStudyPage({
 
         {/* Problem Statement */}
         <section className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500 font-mono">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-subtle font-mono">
             Problem Statement
           </h2>
-          <p className="text-slate-300 leading-relaxed font-light">{study.problem}</p>
+          <p className="text-fg leading-relaxed font-light">{study.problem}</p>
         </section>
 
         {/* My Contribution */}
         <section className="space-y-4">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500 font-mono">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-subtle font-mono">
             My Contribution
           </h2>
           <div className="space-y-4">
             {study.contributions.map((c) => (
               <div
                 key={c.label}
-                className="bg-slate-900/40 border border-slate-800/80 p-5 rounded-xl"
+                className="bg-surface/40 border border-border/80 p-5 rounded-xl"
               >
                 <h3 className="text-sm font-bold text-blue-400 mb-1">{c.label}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed font-light">{c.text}</p>
+                <p className="text-sm text-muted leading-relaxed font-light">{c.text}</p>
               </div>
             ))}
           </div>
@@ -252,14 +252,14 @@ export default async function CaseStudyPage({
 
         {/* Technical Stack */}
         <section className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500 font-mono">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-subtle font-mono">
             Technical Stack
           </h2>
           <div className="flex flex-wrap gap-2">
             {study.stack.map((tech) => (
               <span
                 key={tech}
-                className="bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded-md font-mono border border-slate-700"
+                className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong"
               >
                 {tech}
               </span>
@@ -269,14 +269,14 @@ export default async function CaseStudyPage({
 
         {/* Results */}
         <section className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500 font-mono">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-subtle font-mono">
             Results & Impact
           </h2>
           <ul className="space-y-3">
             {study.results.map((r, i) => (
               <li
                 key={i}
-                className="bg-emerald-950/20 border border-emerald-900/30 p-4 rounded-xl text-sm text-slate-300 leading-relaxed flex gap-3"
+                className="bg-emerald-950/20 border border-emerald-900/30 p-4 rounded-xl text-sm text-fg leading-relaxed flex gap-3"
               >
                 <span className="text-emerald-400 font-bold shrink-0">✓</span>
                 <span>{r}</span>
@@ -291,15 +291,15 @@ export default async function CaseStudyPage({
             href={study.externalLink.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-fg hover:text-white transition-colors"
           >
             {study.externalLink.label} →
           </a>
         )}
 
         {/* CTA */}
-        <div className="border-t border-slate-900 pt-8 text-center space-y-4">
-          <p className="text-slate-400 text-sm">Have a similar challenge you want to solve?</p>
+        <div className="border-t border-border pt-8 text-center space-y-4">
+          <p className="text-muted text-sm">Have a similar challenge you want to solve?</p>
           <a
             href="/contact"
             className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-medium transition-colors"

@@ -63,7 +63,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-20 px-6 relative overflow-hidden">
+    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
       <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-2xl mx-auto space-y-8 z-10 relative">
@@ -72,7 +72,7 @@ export default function ContactPage() {
             ← Back to Home
           </a>
           <h1 className="text-4xl font-extrabold tracking-tight">Let's Collaborate</h1>
-          <p className="text-slate-400 font-light">
+          <p className="text-muted font-light">
             Have a business process you want to automate or need secure AI integration? Fill out the form below.
           </p>
         </div>
@@ -89,42 +89,42 @@ export default function ContactPage() {
         )}
 
         {/* Inquiry Form with onSubmit Event */}
-        <form onSubmit={handleSubmit} className="bg-slate-900/50 border border-slate-800 p-6 sm:p-8 rounded-2xl space-y-6 backdrop-blur-sm">
+        <form onSubmit={handleSubmit} className="bg-surface/50 border border-border p-6 sm:p-8 rounded-2xl space-y-6 backdrop-blur-sm">
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium text-slate-300">Full Name</label>
+              <label htmlFor="name" className="text-sm font-medium text-fg">Full Name</label>
               <input 
                 type="text" id="name" required placeholder="John Doe"
                 value={formData.name} onChange={handleChange}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-sm text-fg focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-slate-300">Business Email</label>
+              <label htmlFor="email" className="text-sm font-medium text-fg">Business Email</label>
               <input 
                 type="email" id="email" required placeholder="john@company.com"
                 value={formData.email} onChange={handleChange}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-sm text-fg focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="company" className="text-sm font-medium text-slate-300">Company Name <span className="text-slate-500 text-xs">(Optional)</span></label>
+            <label htmlFor="company" className="text-sm font-medium text-fg">Company Name <span className="text-subtle text-xs">(Optional)</span></label>
             <input 
               type="text" id="company" placeholder="Acme Corporation"
               value={formData.company} onChange={handleChange}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-sm text-fg focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="serviceType" className="text-sm font-medium text-slate-300">Required Service</label>
+            <label htmlFor="serviceType" className="text-sm font-medium text-fg">Required Service</label>
             <select 
               id="serviceType"
               value={formData.serviceType} onChange={handleChange}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer text-slate-300"
+              className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-sm text-fg focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer text-fg"
             >
               <option value="automation">Workflow Automation / Data Pipelines (n8n, Python)</option>
               <option value="ai-llm">AI Integration / Custom Local LLM & RAG</option>
@@ -134,11 +134,11 @@ export default function ContactPage() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="message" className="text-sm font-medium text-slate-300">Brief Project Details</label>
+            <label htmlFor="message" className="text-sm font-medium text-fg">Brief Project Details</label>
             <textarea 
               id="message" rows={4} required placeholder="Tell me about your current system constraints or bottlenecks..."
               value={formData.message} onChange={handleChange}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+              className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-sm text-fg focus:outline-none focus:border-blue-500 transition-colors resize-none"
             />
           </div>
 
@@ -153,7 +153,7 @@ export default function ContactPage() {
 
         </form>
 
-        <p className="text-center text-xs text-slate-500 font-mono">
+        <p className="text-center text-xs text-subtle font-mono">
           Secure & Private: Your submitted data is processed safely.
         </p>
       </div>

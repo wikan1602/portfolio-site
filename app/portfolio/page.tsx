@@ -103,7 +103,7 @@ export default function PortfolioPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-20 px-6 relative overflow-hidden">
+    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
       
       {/* Background Glow */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none" />
@@ -116,10 +116,10 @@ export default function PortfolioPage() {
           <div className="inline-flex items-center gap-2 bg-blue-950/50 border border-blue-900/50 px-3 py-1 rounded-full text-xs font-mono text-blue-400">
             <span>⚡ AVAILABLE FOR ENTERPRISE DEPLOYMENTS</span>
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl text-fg">
             Case Studies & Engineering Projects
           </h1>
-          <p className="text-slate-400 max-w-3xl text-lg font-light leading-relaxed">
+          <p className="text-muted max-w-3xl text-lg font-light leading-relaxed">
             A showcase of production-grade engineering solutions, infrastructure optimizations, pipeline designs, and robust artificial intelligence implementations deployed to solve real-world complexities.
           </p>
         </div>
@@ -132,7 +132,7 @@ export default function PortfolioPage() {
             return (
               <div 
                 key={index} 
-                className="bg-slate-900/30 border border-slate-800/60 p-6 rounded-2xl flex flex-col justify-between hover:border-slate-700/80 hover:bg-slate-900/50 transition-all backdrop-blur-sm group"
+                className="bg-surface/30 border border-border/60 p-6 rounded-2xl flex flex-col justify-between hover:border-border-strong/80 hover:bg-surface/50 transition-all backdrop-blur-sm group"
               >
                 <div className="space-y-4">
                   {/* Category */}
@@ -146,14 +146,14 @@ export default function PortfolioPage() {
                   </h2>
                   
                   {/* Description */}
-                  <p className="text-slate-400 text-xs font-light leading-relaxed line-clamp-3">
+                  <p className="text-muted text-xs font-light leading-relaxed line-clamp-3">
                     {project.description}
                   </p>
 
                   {/* Tech Stack Badges */}
                   <div className="flex flex-wrap gap-1 pt-2">
                     {project.tags.map((tag, tIdx) => (
-                      <span key={tIdx} className="bg-slate-950/80 text-slate-400 text-[10px] px-2 py-0.5 rounded border border-slate-900 font-mono">
+                      <span key={tIdx} className="bg-bg/80 text-muted text-[10px] px-2 py-0.5 rounded border border-border font-mono">
                         {tag}
                       </span>
                     ))}
@@ -161,10 +161,10 @@ export default function PortfolioPage() {
                 </div>
 
                 {/* Key Impact & Results Section */}
-                <div className="mt-6 pt-4 border-t border-slate-800/40 space-y-3">
+                <div className="mt-6 pt-4 border-t border-border/40 space-y-3">
                   <div className="bg-emerald-950/20 border border-emerald-900/30 p-3 rounded-xl">
                     <div className="text-[9px] uppercase font-mono font-bold tracking-wider text-emerald-400">Key Impact & Result:</div>
-                    <div className="text-xs text-slate-300 mt-0.5 font-medium leading-tight">{project.impact}</div>
+                    <div className="text-xs text-fg mt-0.5 font-medium leading-tight">{project.impact}</div>
                   </div>
 
                   {/* Case Study Details Link */}
@@ -172,7 +172,7 @@ export default function PortfolioPage() {
                     href={project.link}
                     target={isExternal ? "_blank" : undefined}
                     rel={isExternal ? "noopener noreferrer" : undefined}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-white transition-colors pt-1"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-white transition-colors pt-1"
                   >
                     {isExternal ? "View on GitHub" : "Read Technical Analysis"}
                     <span className="transform group-hover:translate-x-1 transition-transform">→</span>
