@@ -3,26 +3,33 @@
 /* next-themes toggles the `dark` class on <html>; light is the :root default. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Warm editorial palette (from the redesign). Light = default. */
 :root {
-  --bg: #ffffff;
-  --surface: #f8fafc;
-  --surface-2: #f1f5f9;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --fg: #0f172a;
-  --fg-muted: #475569;
-  --fg-subtle: #64748b;
+  --bg: #F6F4EE;
+  --surface: #FBFAF5;
+  --surface-2: #EDEAE1;
+  --border: #DEDACE;
+  --border-strong: #C6C0B1;
+  --fg: #17150F;
+  --fg-muted: #55524A;
+  --fg-subtle: #807C71;
+  --accent: #C43C10;
+  --accent-ink: #FBFAF5;
+  --live: #1F8A4C;
 }
 
 .dark {
-  --bg: #020617;
-  --surface: #0f172a;
-  --surface-2: #1e293b;
-  --border: #1e293b;
-  --border-strong: #334155;
-  --fg: #f1f5f9;
-  --fg-muted: #94a3b8;
-  --fg-subtle: #64748b;
+  --bg: #0C0C0D;
+  --surface: #141416;
+  --surface-2: #1C1C1F;
+  --border: #282829;
+  --border-strong: #3A3A3D;
+  --fg: #F4F1EA;
+  --fg-muted: #A7A49B;
+  --fg-subtle: #74716A;
+  --accent: #F0531C;
+  --accent-ink: #0C0C0D;
+  --live: #4BC47E;
 }
 
 @theme inline {
@@ -34,12 +41,32 @@
   --color-fg: var(--fg);
   --color-muted: var(--fg-muted);
   --color-subtle: var(--fg-subtle);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-live: var(--live);
+  --font-sans: var(--ff-sans);
+  --font-mono: var(--ff-mono);
+  --font-serif: var(--ff-serif);
 }
 
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--ff-sans), system-ui, sans-serif;
 }
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+@keyframes wp-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes wp-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.wp-rise { animation: wp-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.wp-pulse { animation: wp-pulse 2s ease-in-out infinite; }

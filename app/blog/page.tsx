@@ -1,75 +1,56 @@
+import Link from "next/link";
+
+const articles = [
+  {
+    slug: "when-to-use-n8n-vs-python-script",
+    title: "When to Use n8n vs. Writing Your Own Python Scripts",
+    description: "An architectural guide to choosing between visual workflow automation and custom scripting based on complexity, scalability, and maintenance costs.",
+    date: "May 31, 2026",
+    readingTime: "5 min read",
+    tags: ["n8n", "Python", "Architecture"],
+  },
+];
+
 export default function BlogPage() {
-  // Mock blog article data (Aligned with blueprint recommendations)
-  const articles = [
-    {
-      slug: "when-to-use-n8n-vs-python-script",
-      title: "When to Use n8n vs. Writing Your Own Python Scripts",
-      description: "An architectural guide to choosing between visual workflow automation and custom scripting based on complexity, scalability, and maintenance costs.",
-      date: "May 31, 2026",
-      readingTime: "5 min read",
-      tags: ["n8n", "Python", "Architecture"]
-    }
-  ];
-
   return (
-    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
-      
-      {/* Background Glow */}
-      <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-purple-500/5 blur-[150px] rounded-full pointer-events-none" />
+    <>
+      {/* Header */}
+      <section className="border-b border-border px-[clamp(18px,4vw,40px)] pt-[clamp(40px,6vw,80px)] pb-[clamp(30px,4vw,48px)]">
+        <div className="font-mono text-[11.5px] tracking-[0.14em] uppercase text-accent mb-4">IDX.06 — Journal</div>
+        <h1 className="text-[clamp(34px,5.4vw,66px)] font-extrabold tracking-[-0.035em] m-0 leading-[0.98] max-w-[16ch]">Notes on automation &amp; AI.</h1>
+        <p className="max-w-[56ch] text-[clamp(15px,1.3vw,18px)] leading-[1.6] text-muted mt-[22px]">
+          Insights, tutorials, and architectural notes on workflow automation, AI integration, and software engineering.
+        </p>
+      </section>
 
-      <div className="max-w-3xl mx-auto space-y-12 z-10 relative">
-        
-        {/* Header */}
-        <div className="space-y-4 text-center sm:text-left">
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-            Technical Blog
-          </h1>
-          <p className="text-muted text-lg font-light">
-            Sharing insights, tutorials, and architectural notes covering workflow automation, AI integration, and software engineering.
-          </p>
-        </div>
-
-        {/* Article List */}
-        <div className="space-y-8 pt-4">
-          {articles.map((article, index) => (
-            <article 
-              key={index} 
-              className="p-6 rounded-2xl bg-surface/30 border border-border hover:border-border hover:bg-surface/50 transition-all group cursor-pointer"
-            >
-              <a href={`/blog/${article.slug}`} className="block space-y-3">
-                
-                {/* Meta: Date & Reading Time Estimate */}
-                <div className="flex items-center gap-3 text-xs font-mono text-subtle">
-                  <span>{article.date}</span>
-                  <span>•</span>
-                  <span>{article.readingTime}</span>
-                </div>
-
-                {/* Article Title */}
-                <h2 className="text-xl font-bold text-fg group-hover:text-blue-400 transition-colors">
-                  {article.title}
-                </h2> 
-
-                {/* Brief Description */}
-                <p className="text-muted text-sm font-light leading-relaxed">
-                  {article.description}
-                </p>
-
-                {/* Badges / Tags */}
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {article.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="bg-bg text-subtle text-[10px] font-mono px-2 py-0.5 rounded border border-border">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-
-              </a>
-            </article>
-          ))}
-        </div>
-
-      </div>
-    </main>
+      {/* Article list */}
+      <section className="border-b border-border">
+        {articles.map((article, i) => (
+          <Link
+            key={article.slug}
+            href={`/blog/${article.slug}`}
+            className={`group block px-[clamp(18px,4vw,40px)] py-[clamp(28px,3vw,40px)] hover:bg-surface transition-colors ${
+              i < articles.length - 1 ? "border-b border-border" : ""
+            }`}
+          >
+            <div className="flex items-center gap-3 font-mono text-[11px] text-subtle mb-3">
+              <span className="text-accent">{String(i + 1).padStart(2, "0")}</span>
+              <span>{article.date}</span>
+              <span>·</span>
+              <span>{article.readingTime}</span>
+            </div>
+            <h2 className="text-[clamp(20px,2.2vw,26px)] font-bold tracking-[-0.02em] leading-[1.2] m-0 mb-2.5 group-hover:text-accent transition-colors">
+              {article.title}
+            </h2>
+            <p className="max-w-[70ch] text-sm text-muted leading-[1.6] m-0 mb-4">{article.description}</p>
+            <div className="flex flex-wrap gap-1.5">
+              {article.tags.map((tag) => (
+                <span key={tag} className="font-mono text-[10px] text-subtle border border-border px-[7px] py-[3px] rounded-[2px]">#{tag}</span>
+              ))}
+            </div>
+          </Link>
+        ))}
+      </section>
+    </>
   );
 }

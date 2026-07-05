@@ -1,119 +1,84 @@
+const CREDIBILITY = [
+  { n: "01", title: "1st Place", note: "West Java Health Tech Innovation Competition 2025" },
+  { n: "02", title: "Published Research", note: "Presented at the ISPACS 2025 international symposium" },
+  { n: "03", title: "Biomedical Eng.", note: "Institut Teknologi Bandung (ITB)" },
+];
+
+const STACK = [
+  {
+    title: "Automation & AI Ecosystem",
+    accent: true,
+    items: [
+      "n8n (Workflow Automation)",
+      "Local LLM deployment (Qwen / Ollama)",
+      "RAG (Retrieval-Augmented Generation)",
+      "LangChain & Python scripting",
+    ],
+  },
+  {
+    title: "Core Backend & Data",
+    accent: false,
+    items: [
+      "C# / .NET Core / ASP.NET Web Forms",
+      "SQL Server & database migration",
+      "Next.js / TypeScript (Frontend)",
+      "Docker containers & Linux VPS",
+    ],
+  },
+];
+
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
+    <>
+      {/* Header / Bio */}
+      <section className="border-b border-border px-[clamp(18px,4vw,40px)] pt-[clamp(40px,6vw,80px)] pb-[clamp(32px,4vw,52px)]">
+        <div className="font-mono text-[11.5px] tracking-[0.14em] uppercase text-accent mb-4">IDX.03 — About</div>
+        <h1 className="text-[clamp(34px,5.4vw,66px)] font-extrabold tracking-[-0.035em] m-0 mb-[26px] leading-[0.98]">Wikan Priambudi.</h1>
+        <p className="max-w-[62ch] text-[clamp(16px,1.4vw,20px)] leading-[1.55] text-fg mb-4">
+          A <span className="text-accent font-semibold">Biomedical Engineer (ITB)</span> turned <span className="text-accent font-semibold">AI &amp; Automation Engineer</span> — I bridge traditional enterprise systems with modern automation and AI, and I&apos;m equally comfortable talking to a clinician about the problem and building the production pipeline that solves it.
+        </p>
+        <p className="max-w-[62ch] text-[14.5px] leading-[1.65] text-muted m-0">
+          With a strong foundation in backend development and database management, I help businesses build efficient workflow automation and integrate self-hosted LLMs — keeping sensitive data private and fully under the company&apos;s own control.
+        </p>
+      </section>
 
-      {/* Background Glow */}
-      <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
-
-      <div className="max-w-3xl mx-auto space-y-12 z-10 relative">
-
-        {/* Intro / Bio */}
-        <div className="space-y-4">
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-            About Me
-          </h1>
-          <p className="text-lg text-fg font-light leading-relaxed">
-            I&apos;m a <span className="text-blue-400 font-medium">Biomedical Engineer (ITB)</span> turned <span className="text-blue-400 font-medium">AI &amp; Automation Engineer</span>. I bridge traditional enterprise systems with modern automation and artificial intelligence — and because of my background, I&apos;m equally comfortable talking to a clinician about the problem and building the production pipeline that solves it.
-          </p>
-          <p className="text-muted text-sm leading-relaxed font-light">
-            With a strong foundation in backend development and database management, I help businesses build efficient workflow automation and integrate self-hosted Large Language Models (LLMs) — keeping sensitive data private and fully under the company&apos;s own control.
-          </p>
-        </div>
-
-        {/* Credibility / Proof Points */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-surface/40 border border-border p-5 rounded-xl space-y-1">
-            <div className="text-2xl">🏆</div>
-            <div className="text-sm font-semibold text-fg">1st Place</div>
-            <div className="text-xs text-subtle leading-relaxed">West Java Health Tech Innovation Competition 2025</div>
+      {/* Credibility */}
+      <section className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] border-b border-border">
+        {CREDIBILITY.map((c, i) => (
+          <div key={c.n} className={`px-[clamp(18px,3vw,28px)] py-[clamp(24px,3vw,36px)] ${i < CREDIBILITY.length - 1 ? "border-r border-border" : ""}`}>
+            <div className="font-mono text-[11px] text-subtle">{c.n}</div>
+            <div className="text-[19px] font-extrabold mt-3 mb-1.5 tracking-[-0.01em]">{c.title}</div>
+            <div className="text-[13px] text-muted leading-[1.5]">{c.note}</div>
           </div>
-          <div className="bg-surface/40 border border-border p-5 rounded-xl space-y-1">
-            <div className="text-2xl">📄</div>
-            <div className="text-sm font-semibold text-fg">Published Research</div>
-            <div className="text-xs text-subtle leading-relaxed">Presented at ISPACS 2025 international symposium</div>
-          </div>
-          <div className="bg-surface/40 border border-border p-5 rounded-xl space-y-1">
-            <div className="text-2xl">🎓</div>
-            <div className="text-sm font-semibold text-fg">Biomedical Eng.</div>
-            <div className="text-xs text-subtle leading-relaxed">Institut Teknologi Bandung (ITB)</div>
-          </div>
-        </div>
+        ))}
+      </section>
 
-        {/* Philosophy */}
-        <div className="border-l-2 border-blue-500 pl-4 space-y-2">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted">Solution Philosophy</h3>
-          <p className="text-fg text-sm italic font-light">
-            &quot;Automation isn&apos;t about replacing people — it&apos;s about eliminating the boring, repetitive tasks so your team can focus on the work that actually moves the needle.&quot;
-          </p>
-        </div>
+      {/* Philosophy */}
+      <section className="border-b border-border bg-surface px-[clamp(18px,4vw,40px)] py-[clamp(40px,5vw,72px)]">
+        <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-subtle mb-5">Solution philosophy</div>
+        <p className="font-serif italic text-[clamp(24px,3.4vw,42px)] leading-[1.3] tracking-[-0.01em] max-w-[22ch] m-0">
+          Automation isn&apos;t about replacing people. It&apos;s about eliminating the boring work so your team can move the needle.
+        </p>
+      </section>
 
-        {/* Technical Stack / Skills */}
-        <div className="space-y-6 pt-4">
-          <h2 className="text-2xl font-bold tracking-tight">Technical Stack &amp; Tools</h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
-            {/* Box 1: Automation & AI */}
-            <div className="bg-surface/40 border border-border p-5 rounded-xl space-y-3">
-              <h3 className="text-sm font-semibold text-blue-400 font-mono">Automation &amp; AI Ecosystem</h3>
-              <ul className="text-xs text-muted space-y-2 font-mono">
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  n8n (Workflow Automation)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  Local LLM deployment (Qwen / Ollama)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  RAG (Retrieval-Augmented Generation)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  LangChain &amp; Python Scripting
-                </li>
+      {/* Stack */}
+      <section className="px-[clamp(18px,4vw,40px)] py-[clamp(36px,4vw,60px)]">
+        <div className="font-mono text-[11.5px] tracking-[0.14em] uppercase text-subtle mb-7">Technical stack &amp; tools</div>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-px bg-border border border-border">
+          {STACK.map((col) => (
+            <div key={col.title} className="bg-bg px-[clamp(22px,2.6vw,32px)] py-[clamp(22px,2.6vw,32px)]">
+              <div className={`font-mono text-[13px] font-semibold mb-4 ${col.accent ? "text-accent" : "text-fg"}`}>{col.title}</div>
+              <ul className="list-none p-0 m-0 flex flex-col gap-3 font-mono text-[12.5px] text-muted">
+                {col.items.map((it) => (
+                  <li key={it} className="flex gap-2.5">
+                    <span className={col.accent ? "text-accent" : "text-subtle"}>◆</span>{it}
+                  </li>
+                ))}
               </ul>
             </div>
-
-            {/* Box 2: Core Engineering */}
-            <div className="bg-surface/40 border border-border p-5 rounded-xl space-y-3">
-              <h3 className="text-sm font-semibold text-purple-400 font-mono">Core Backend &amp; Data</h3>
-              <ul className="text-xs text-muted space-y-2 font-mono">
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                  C# / .NET Core / ASP.NET Web Forms
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                  SQL Server &amp; Database Migration
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                  Next.js / TypeScript (Frontend)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                  Docker Containers &amp; Linux VPS
-                </li>
-              </ul>
-            </div>
-
-          </div>
+          ))}
         </div>
-
-        {/* Call to Action */}
-        <div className="bg-surface/30 border border-border p-6 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-center sm:text-left">
-            <h4 className="text-sm font-medium">Interested in discussing your system architecture?</h4>
-            <p className="text-xs text-subtle">Let&apos;s schedule a short, free consultation.</p>
-          </div>
-          <a href="/contact" className="bg-fg hover:opacity-90 text-bg text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors whitespace-nowrap">
-            Get in Touch
-          </a>
-        </div>
-
-      </div>
-    </main>
+      </section>
+    </>
   );
 }

@@ -97,78 +97,62 @@ export default async function ArticlePage({
   if (!article) notFound();
 
   return (
-    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 blur-[150px] rounded-full pointer-events-none" />
+    <>
+      <article className="border-b border-border px-[clamp(18px,4vw,40px)] py-[clamp(40px,6vw,80px)]">
+        <div className="max-w-[68ch] mx-auto">
+          {/* Header */}
+          <header className="mb-10">
+            <a href="/blog" className="font-mono text-[12px] text-accent hover:opacity-80 transition-opacity inline-flex items-center gap-1.5 mb-6">
+              ← Back to journal
+            </a>
+            <div className="flex items-center gap-3 font-mono text-[11px] text-subtle mb-4">
+              <span>{article.date}</span>
+              <span>·</span>
+              <span>{article.readingTime}</span>
+            </div>
+            <h1 className="text-[clamp(30px,4.2vw,52px)] font-extrabold tracking-[-0.03em] leading-[1.02] m-0 mb-5">
+              {article.title}
+            </h1>
+            <div className="flex flex-wrap gap-1.5">
+              {article.tags.map((tag) => (
+                <span key={tag} className="font-mono text-[10px] text-subtle border border-border px-[7px] py-[3px] rounded-[2px]">#{tag}</span>
+              ))}
+            </div>
+          </header>
 
-      <article className="max-w-2xl mx-auto space-y-8 z-10 relative">
-        {/* Header */}
-        <header className="space-y-4">
-          <a
-            href="/blog"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors inline-flex items-center gap-1 font-mono"
-          >
-            ← Back to Blog
-          </a>
-          <div className="flex items-center gap-3 text-xs font-mono text-subtle">
-            <span>{article.date}</span>
-            <span>•</span>
-            <span>{article.readingTime}</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-            {article.title}
-          </h1>
-          <div className="flex flex-wrap gap-2">
-            {article.tags.map((tag) => (
-              <span
-                key={tag}
-                className="bg-bg text-subtle text-[10px] font-mono px-2 py-0.5 rounded border border-border"
-              >
-                #{tag}
-              </span>
+          {/* Body */}
+          <div className="flex flex-col gap-8">
+            {article.body.map((section, i) => (
+              <section key={i} className="flex flex-col gap-3">
+                {section.heading && (
+                  <h2 className="text-[clamp(20px,2.2vw,26px)] font-bold tracking-[-0.015em] pt-2 m-0">{section.heading}</h2>
+                )}
+                {section.paragraphs.map((p, pi) => (
+                  <p key={pi} className="text-[16px] text-fg leading-[1.7] m-0">{p}</p>
+                ))}
+                {section.bullets && (
+                  <ul className="list-none p-0 m-0 flex flex-col gap-2 pt-1">
+                    {section.bullets.map((b, bi) => (
+                      <li key={bi} className="text-muted text-[14.5px] leading-[1.6] flex gap-2.5">
+                        <span className="text-accent shrink-0 font-mono">→</span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
             ))}
           </div>
-        </header>
-
-        {/* Body */}
-        <div className="space-y-8">
-          {article.body.map((section, i) => (
-            <section key={i} className="space-y-3">
-              {section.heading && (
-                <h2 className="text-xl font-bold text-fg pt-2">{section.heading}</h2>
-              )}
-              {section.paragraphs.map((p, pi) => (
-                <p key={pi} className="text-fg leading-relaxed font-light">
-                  {p}
-                </p>
-              ))}
-              {section.bullets && (
-                <ul className="space-y-2 pt-1">
-                  {section.bullets.map((b, bi) => (
-                    <li key={bi} className="text-muted text-sm leading-relaxed flex gap-2.5">
-                      <span className="text-purple-400 shrink-0">→</span>
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <div className="border-t border-border pt-8 text-center space-y-4">
-          <p className="text-muted text-sm">
-            Want to automate a process without the maintenance headache?
-          </p>
-          <a
-            href="/contact"
-            className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-medium transition-colors"
-          >
-            Let&apos;s Talk
-          </a>
         </div>
       </article>
-    </main>
+
+      {/* CTA */}
+      <section className="px-[clamp(18px,4vw,40px)] py-[clamp(40px,5vw,64px)] text-center">
+        <p className="text-muted text-[15px] mb-5">Want to automate a process without the maintenance headache?</p>
+        <a href="/contact" className="inline-flex items-center gap-2.5 bg-fg text-bg text-[15px] font-semibold px-[26px] py-3.5 rounded-[2px] hover:opacity-90 transition-opacity">
+          Let&apos;s talk <span className="font-mono">→</span>
+        </a>
+      </section>
+    </>
   );
 }

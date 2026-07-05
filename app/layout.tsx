@@ -1,34 +1,43 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { SiteNavbar, SiteFooter } from "@/components/SiteChrome";
+import { Schibsted_Grotesk, JetBrains_Mono, Newsreader } from "next/font/google";
 import ThemeProvider from "@/components/ThemeProvider";
+import SiteShell from "@/components/SiteShell";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sans = Schibsted_Grotesk({
+  variable: "--ff-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const mono = JetBrains_Mono({
+  variable: "--ff-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const serif = Newsreader({
+  variable: "--ff-serif",
+  subsets: ["latin"],
+  style: ["italic"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wikan-ai.my.id"),
-  title: "Wikan | Automation & AI Specialist",
-  description: "Portfolio & Services for Workflow Automation & AI/LLM Integration",
+  title: "Wikan | Automation & AI Engineer",
+  description: "Automation & applied AI, engineered like infrastructure — private, low-latency, production-grade.",
   openGraph: {
-    title: "Wikan | Automation & AI Specialist",
-    description: "Portfolio & Services for Workflow Automation & AI/LLM Integration",
+    title: "Wikan | Automation & AI Engineer",
+    description: "Automation & applied AI, engineered like infrastructure — private, low-latency, production-grade.",
     url: "https://wikan-ai.my.id",
     siteName: "Wikan Portfolio",
     images: [
       {
-        url: "/og-image.png", // Mengarah ke public/og-image.png
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Wikan | Automation & AI Specialist Portfolio Preview",
+        alt: "Wikan | Automation & AI Engineer",
       },
     ],
     locale: "en_US",
@@ -36,8 +45,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wikan | Automation & AI Specialist",
-    description: "Portfolio & Services for Workflow Automation & AI/LLM Integration",
+    title: "Wikan | Automation & AI Engineer",
+    description: "Automation & applied AI, engineered like infrastructure — private, low-latency, production-grade.",
     images: ["/og-image.png"],
   },
 };
@@ -49,20 +58,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-bg text-fg min-h-screen flex flex-col`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-
-          {/* Public nav — hidden on /admin */}
-          <SiteNavbar />
-
-          {/* PAGE CONTENT */}
-          <div className="flex-grow">
-            {children}
-          </div>
-
-          {/* Public footer — hidden on /admin */}
-          <SiteFooter />
-
+      <body className={`${sans.variable} ${mono.variable} ${serif.variable} font-sans antialiased bg-bg text-fg min-h-screen`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <SiteShell>{children}</SiteShell>
         </ThemeProvider>
       </body>
     </html>

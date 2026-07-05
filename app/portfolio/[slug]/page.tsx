@@ -190,124 +190,81 @@ export default async function CaseStudyPage({
   if (!study) notFound();
 
   return (
-    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none" />
+    <>
+      {/* Header */}
+      <section className="border-b border-border px-[clamp(18px,4vw,40px)] pt-[clamp(36px,5vw,64px)] pb-[clamp(28px,3vw,44px)]">
+        <a href="/portfolio" className="font-mono text-[12px] text-accent hover:opacity-80 transition-opacity inline-flex items-center gap-1.5 mb-6">
+          ← Back to work
+        </a>
+        <div className="font-mono text-[11px] tracking-[0.1em] uppercase text-accent mb-3">{study.category}</div>
+        <h1 className="text-[clamp(28px,4vw,52px)] font-extrabold tracking-[-0.03em] leading-[1.02] m-0 max-w-[22ch]">{study.title}</h1>
+        <div className="inline-flex items-center gap-2 border border-border-strong text-live font-mono text-[11px] px-3 py-1.5 rounded-[2px] mt-5">
+          {study.context}
+        </div>
+        <div className="flex flex-wrap gap-1.5 mt-5">
+          {study.tags.map((tag) => (
+            <span key={tag} className="font-mono text-[10px] text-subtle border border-border px-[7px] py-[3px] rounded-[2px]">{tag}</span>
+          ))}
+        </div>
+      </section>
 
-      <article className="max-w-3xl mx-auto space-y-12 z-10 relative">
-        {/* Header */}
-        <header className="space-y-4">
-          <a
-            href="/portfolio"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors inline-flex items-center gap-1 font-mono"
-          >
-            ← Back to Portfolio
-          </a>
-          <span className="block text-xs font-mono font-medium text-blue-400 uppercase tracking-wider">
-            {study.category}
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-fg">
-            {study.title}
-          </h1>
-          <div className="inline-flex items-center gap-2 bg-emerald-950/30 border border-emerald-900/40 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-400">
-            {study.context}
-          </div>
-          <div className="flex flex-wrap gap-2 pt-2">
-            {study.tags.map((tag) => (
-              <span
-                key={tag}
-                className="bg-surface text-muted text-xs px-2.5 py-1 rounded-md font-mono border border-border"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </header>
-
-        {/* Problem Statement */}
-        <section className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-subtle font-mono">
-            Problem Statement
-          </h2>
-          <p className="text-fg leading-relaxed font-light">{study.problem}</p>
+      <div className="max-w-[74ch] mx-auto px-[clamp(18px,4vw,40px)] py-[clamp(36px,4vw,56px)] flex flex-col gap-12">
+        {/* Problem */}
+        <section className="flex flex-col gap-3">
+          <h2 className="font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-subtle">Problem statement</h2>
+          <p className="text-[16px] text-fg leading-[1.7] m-0">{study.problem}</p>
         </section>
 
-        {/* My Contribution */}
-        <section className="space-y-4">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-subtle font-mono">
-            My Contribution
-          </h2>
-          <div className="space-y-4">
+        {/* Contribution */}
+        <section className="flex flex-col gap-4">
+          <h2 className="font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-subtle">My contribution</h2>
+          <div className="flex flex-col gap-px bg-border border border-border">
             {study.contributions.map((c) => (
-              <div
-                key={c.label}
-                className="bg-surface/40 border border-border/80 p-5 rounded-xl"
-              >
-                <h3 className="text-sm font-bold text-blue-400 mb-1">{c.label}</h3>
-                <p className="text-sm text-muted leading-relaxed font-light">{c.text}</p>
+              <div key={c.label} className="bg-bg p-5">
+                <h3 className="text-sm font-bold text-accent mb-1.5">{c.label}</h3>
+                <p className="text-sm text-muted leading-[1.6] m-0">{c.text}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Technical Stack */}
-        <section className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-subtle font-mono">
-            Technical Stack
-          </h2>
+        {/* Stack */}
+        <section className="flex flex-col gap-3">
+          <h2 className="font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-subtle">Technical stack</h2>
           <div className="flex flex-wrap gap-2">
             {study.stack.map((tech) => (
-              <span
-                key={tech}
-                className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong"
-              >
-                {tech}
-              </span>
+              <span key={tech} className="font-mono text-[11px] text-muted border border-border-strong px-[9px] py-[5px] rounded-[2px]">{tech}</span>
             ))}
           </div>
         </section>
 
         {/* Results */}
-        <section className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-subtle font-mono">
-            Results & Impact
-          </h2>
-          <ul className="space-y-3">
+        <section className="flex flex-col gap-3">
+          <h2 className="font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-subtle">Results &amp; impact</h2>
+          <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
             {study.results.map((r, i) => (
-              <li
-                key={i}
-                className="bg-emerald-950/20 border border-emerald-900/30 p-4 rounded-xl text-sm text-fg leading-relaxed flex gap-3"
-              >
-                <span className="text-emerald-400 font-bold shrink-0">✓</span>
+              <li key={i} className="text-[14.5px] text-fg leading-[1.6] flex gap-3">
+                <span className="text-live font-bold shrink-0">✓</span>
                 <span>{r}</span>
               </li>
             ))}
           </ul>
         </section>
 
-        {/* External link (if any) */}
         {study.externalLink && (
-          <a
-            href={study.externalLink.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-fg hover:text-white transition-colors"
-          >
-            {study.externalLink.label} →
+          <a href={study.externalLink.url} target="_blank" rel="noopener noreferrer" className="font-mono text-[13px] text-accent hover:opacity-80 transition-opacity">
+            {study.externalLink.label} ↗
           </a>
         )}
+      </div>
 
-        {/* CTA */}
-        <div className="border-t border-border pt-8 text-center space-y-4">
-          <p className="text-muted text-sm">Have a similar challenge you want to solve?</p>
-          <a
-            href="/contact"
-            className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-medium transition-colors"
-          >
-            Start a Project Discussion
-          </a>
-        </div>
-      </article>
-    </main>
+      {/* CTA */}
+      <section className="border-t border-border px-[clamp(18px,4vw,40px)] py-[clamp(40px,5vw,64px)] text-center">
+        <p className="text-muted text-[15px] mb-5">Have a similar challenge you want to solve?</p>
+        <a href="/contact" className="inline-flex items-center gap-2.5 bg-fg text-bg text-[15px] font-semibold px-[26px] py-3.5 rounded-[2px] hover:opacity-90 transition-opacity">
+          Start a project discussion <span className="font-mono">→</span>
+        </a>
+      </section>
+    </>
   );
 }

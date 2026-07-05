@@ -1,122 +1,98 @@
+import Link from "next/link";
+
+const DISCIPLINES = [
+  {
+    key: "A",
+    n: "Discipline 01",
+    title: "Automation & Scripting",
+    desc: "Building integrated data-pipeline ecosystems to eliminate repetitive, error-prone manual data entry.",
+    examples: [
+      "Automated invoice extraction from emails straight into internal databases.",
+      "Multi-platform data sync via custom REST API integration.",
+      "Workflow migration from Zapier to self-hosted architecture.",
+    ],
+    tags: ["n8n", "Python", "PostgreSQL", "Docker"],
+  },
+  {
+    key: "B",
+    n: "Discipline 02",
+    title: "AI & LLM Integration",
+    desc: "Injecting advanced AI into internal systems with a strict focus on data-privacy security.",
+    examples: [
+      "RAG architectures for searching internal knowledge bases.",
+      "On-premise Local LLMs (e.g. Qwen) for sensitive records.",
+      "Intelligent agents & chatbots wired into management systems.",
+    ],
+    tags: ["LangChain", "Local LLM / Qwen", "RAG", "Ollama / vLLM"],
+  },
+];
+
+const PROCESS = [
+  { n: "01", title: "Discovery", desc: "Deep analysis of current workflow bottlenecks and your specific business requirements." },
+  { n: "02", title: "Build & Test", desc: "Iterative development engineered with low-latency and performance as top priorities." },
+  { n: "03", title: "Handover", desc: "Knowledge transfer, documentation, and production-ready deployment on your own servers." },
+];
+
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen bg-bg text-fg py-20 px-6 relative overflow-hidden">
-      
-      {/* Background Glow */}
-      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-purple-500/10 blur-[120px] rounded-full pointer-events-none" />
+    <>
+      {/* Header */}
+      <section className="border-b border-border px-[clamp(18px,4vw,40px)] pt-[clamp(40px,6vw,80px)] pb-[clamp(30px,4vw,48px)]">
+        <div className="font-mono text-[11.5px] tracking-[0.14em] uppercase text-accent mb-4">IDX.02 — Services</div>
+        <h1 className="text-[clamp(34px,5.4vw,66px)] font-extrabold tracking-[-0.035em] m-0 leading-[0.98] max-w-[16ch]">Services &amp; technical solutions.</h1>
+        <p className="max-w-[56ch] text-[clamp(15px,1.3vw,18px)] leading-[1.6] text-muted mt-[22px]">
+          Bridging business infrastructure with modern automation and artificial intelligence — engineered for maximum operational efficiency, privacy, and low latency.
+        </p>
+      </section>
 
-      <div className="max-w-5xl mx-auto space-y-12 z-10 relative">
-        
-        {/* Page Header */}
-        <div className="space-y-4">
-          <a href="/" className="text-sm text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 font-mono">
-            ← Back to Home
-          </a>
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-            Services & Technical Solutions
-          </h1>
-          <p className="text-muted max-w-2xl text-lg font-light">
-            Bridging business infrastructure with modern automation technologies and artificial intelligence for maximum operational efficiency.
-          </p>
-        </div>
-
-        {/* Grid of Two Core Categories */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-          
-          {/* Category 1: Automation & Scripting */}
-          <div className="bg-surface/60 border border-border/80 p-8 rounded-2xl space-y-6 hover:border-border-strong transition-all backdrop-blur-sm">
-            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
+      {/* Disciplines */}
+      <section className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] border-b border-border">
+        {DISCIPLINES.map((d, i) => (
+          <div key={d.key} className={`px-[clamp(18px,4vw,40px)] py-[clamp(28px,3.4vw,44px)] ${i === 0 ? "border-r border-border" : "bg-surface"}`}>
+            <div className="flex items-center gap-3 mb-5">
+              <span className="font-mono text-[12px] text-accent">{d.key}/</span>
+              <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-subtle">{d.n}</span>
             </div>
-            
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold">Automation & Scripting</h2>
-              <p className="text-sm text-muted leading-relaxed">
-                Building integrated data pipeline ecosystems to eliminate repetitive and error-prone manual data entry tasks.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-subtle">Implementation Examples:</h3>
-              <ul className="text-sm text-fg space-y-2 list-disc list-inside">
-                <li>Automated invoice document extraction from emails directly into internal databases.</li>
-                <li>Multi-platform data synchronization via custom REST API integration.</li>
-                <li>Workflow automation migration from Zapier to self-hosted architecture.</li>
-              </ul>
-            </div>
-
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong">n8n</span>
-              <span className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong">Python</span>
-              <span className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong">PostgreSQL</span>
-              <span className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong">Docker</span>
+            <h2 className="text-[clamp(23px,2.4vw,30px)] font-extrabold tracking-[-0.02em] m-0">{d.title}</h2>
+            <p className="text-sm text-muted leading-[1.6] mt-3.5 mb-6">{d.desc}</p>
+            <div className="font-mono text-[10.5px] tracking-[0.1em] uppercase text-subtle mb-3">Implementation examples</div>
+            <ul className="list-none p-0 mt-0 mb-6 flex flex-col gap-3">
+              {d.examples.map((e) => (
+                <li key={e} className="flex gap-[11px] text-[13.5px] text-fg leading-[1.5]">
+                  <span className="text-accent font-mono">→</span>{e}
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap gap-2">
+              {d.tags.map((t) => (
+                <span key={t} className="font-mono text-[11px] text-muted border border-border-strong px-[9px] py-[5px] rounded-[2px]">{t}</span>
+              ))}
             </div>
           </div>
+        ))}
+      </section>
 
-          {/* Category 2: AI/LLM Integration */}
-          <div className="bg-surface/60 border border-border/80 p-8 rounded-2xl space-y-6 hover:border-border-strong transition-all backdrop-blur-sm">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
-              <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
+      {/* Process */}
+      <section className="border-b border-border px-[clamp(18px,4vw,40px)] py-[clamp(36px,4vw,60px)]">
+        <div className="font-mono text-[11.5px] tracking-[0.14em] uppercase text-subtle mb-7">3 steps of collaboration</div>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-px bg-border border border-border">
+          {PROCESS.map((p) => (
+            <div key={p.n} className="bg-bg px-[clamp(22px,2.6vw,32px)] py-[clamp(22px,2.6vw,32px)]">
+              <div className="font-mono text-[28px] font-bold text-accent tracking-[-0.02em]">{p.n}</div>
+              <div className="text-[17px] font-bold mt-3.5 mb-2">{p.title}</div>
+              <div className="text-[13.5px] text-muted leading-[1.55]">{p.desc}</div>
             </div>
-
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold">AI & LLM Integration</h2>
-              <p className="text-sm text-muted leading-relaxed">
-                Injecting advanced artificial intelligence capabilities into internal corporate systems with a strict focus on data privacy security.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-subtle">Implementation Examples:</h3>
-              <ul className="text-sm text-fg space-y-2 list-disc list-inside">
-                <li>Retrieval-Augmented Generation (RAG) architectures for searching internal knowledge bases.</li>
-                <li>On-premise deployment of Local LLMs (such as Qwen) for processing sensitive records safely.</li>
-                <li>Intelligent AI agents and chatbots integrated smoothly into corporate management systems.</li>
-              </ul>
-            </div>
-
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong">LangChain</span>
-              <span className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong">Local LLM / Qwen</span>
-              <span className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong">RAG Pipelines</span>
-              <span className="bg-surface-2 text-fg text-xs px-2.5 py-1 rounded-md font-mono border border-border-strong">Ollama / vLLM</span>
-            </div>
-          </div>
-
+          ))}
         </div>
+      </section>
 
-        {/* Process Workflow Section */}
-        <div className="border border-border bg-surface/20 p-8 rounded-2xl space-y-6">
-          <h3 className="text-xl font-bold text-center">3 Steps of Collaboration</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center text-sm">
-            <div className="space-y-2">
-              <div className="text-blue-400 font-mono font-bold text-base">01. Discovery</div>
-              <p className="text-muted">Deep analysis of current workflow bottlenecks and your specific business requirements.</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-purple-400 font-mono font-bold text-base">02. Build & Test</div>
-              <p className="text-muted">Iterative system development engineered with low-latency and performance as top priorities.</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-emerald-400 font-mono font-bold text-base">03. Handover</div>
-              <p className="text-muted">Knowledge transfer, comprehensive documentation, and production-ready deployment on your servers.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="text-center pt-4">
-          <p className="text-muted text-sm mb-4">Have custom integration needs or system bottlenecks you want to discuss?</p>
-          <a href="/contact" className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-medium transition-colors">
-            Start Project Discussion
-          </a>
-        </div>
-
-      </div>
-    </main>
+      {/* CTA */}
+      <section className="px-[clamp(18px,4vw,40px)] py-[clamp(40px,5vw,72px)] text-center">
+        <p className="text-[15px] text-muted mb-[22px]">Have custom integration needs or system bottlenecks to discuss?</p>
+        <Link href="/contact" className="inline-flex items-center gap-2.5 bg-fg text-bg text-[15px] font-semibold px-[26px] py-3.5 rounded-[2px] hover:opacity-90 transition-opacity">
+          Start a project discussion <span className="font-mono">→</span>
+        </Link>
+      </section>
+    </>
   );
 }
