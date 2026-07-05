@@ -11,6 +11,15 @@ export default function PortfolioPage() {
       link: "/portfolio/hospital-data-warehouse-cdc"
     },
     {
+      slug: "autonomous-finance-analyst",
+      title: "Autonomous Finance Analyst Agent",
+      description: "Built an agentic system that autonomously composes and delivers daily financial briefings — fetching stock quotes and company news for a watchlist, analyzing them, and sending a formatted briefing to Telegram on a daily schedule with no human in the loop.",
+      category: "Agentic AI & Automation",
+      tags: ["LangGraph", "FastAPI", "n8n", "GPT-4o-mini", "Finnhub API", "Docker"],
+      impact: "End-to-end agentic pipeline (planner → agent ⇄ tools → finalize) with per-run token/cost tracking; read-only by design for safe unattended runs. Scheduled via n8n and delivered to Telegram.",
+      link: "https://github.com/wikan1602/autonomous-finance-analyst"
+    },
+    {
     slug: "enterprise-document-intelligence-system",
     title: "Enterprise Multi-Format Document Intelligence & RAG Pipeline",
     description: "Engineered a production-grade document processing and insight extraction engine featuring custom multi-format parsing pipelines, context-aware semantic chunking, vector search, and cross-encoder reranking.",
