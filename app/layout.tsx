@@ -3,6 +3,7 @@ import { Schibsted_Grotesk, JetBrains_Mono, Newsreader } from "next/font/google"
 import ThemeProvider from "@/components/ThemeProvider";
 import SiteShell from "@/components/SiteShell";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const sans = Schibsted_Grotesk({
@@ -64,6 +65,7 @@ export default function RootLayout({
           <SiteShell>{children}</SiteShell>
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
