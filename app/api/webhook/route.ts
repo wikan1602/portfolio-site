@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Pool } from 'pg'; // 1. Import pg pool untuk koneksi database
 import { touchConversation, getMode, ensureChatHistoryColumns } from '@/app/lib/conversation';
+import { archiveInboundMedia } from '@/app/lib/whatsappMedia';
 
 // Lazy pool: dibuat saat request pertama, BUKAN saat import module.
 // Kalau di-parse saat build (DATABASE_URL kosong), `new URL('')` akan throw
@@ -101,10 +102,15 @@ async function storeIncomingMedia(
     const content = caption || `[${type}]`;
     const waMessageId = (message.id as string) ?? null;
 
+    // Archive to Blob now, while Meta's media_id is still fresh — it only
+    // resolves for a limited window (~30 days). Best-effort: a failure here
+    // (network hiccup, missing token) must not drop the inbound message.
+    const mediaUrl = mediaId ? await archiveInboundMedia(mediaId).catch(() => null) : null;
+
     await ensureChatHistoryColumns(db);
     await db.query(
-      'INSERT INTO wa_chat_history (phone_number, role, content, media_type, media_id, wa_message_id) VALUES ($1, $2, $3, $4, $5, $6)',
-      [recipientPhone, 'user', content, mediaId ? type : null, mediaId, waMessageId]
+      'INSERT INTO wa_chat_history (phone_number, role, content, media_type, media_id, media_url, wa_message_id) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [recipientPhone, 'user', content, mediaId ? type : null, mediaId, mediaUrl, waMessageId]
     );
     await touchConversation(db, recipientPhone, phone_number_id);
   } catch (err) {

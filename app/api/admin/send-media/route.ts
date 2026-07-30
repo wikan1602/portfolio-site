@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from '@/app/lib/auth';
 import { getPool } from '@/app/lib/db';
 import { getPhoneNumberId, ensureChatHistoryColumns } from '@/app/lib/conversation';
+import { uploadToBlob, extFromMime } from '@/app/lib/blob';
 
 const WA_ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
 const MAX_BYTES = 16 * 1024 * 1024; // 16MB — safe under WhatsApp's per-type limits
@@ -49,6 +50,14 @@ export async function POST(request: NextRequest) {
 
   const auth = { Authorization: `Bearer ${WA_ACCESS_TOKEN}` };
 
+  // 0. Archive our own copy to Blob first — we already have the raw bytes
+  // in hand, so there's no need to round-trip through Meta to get them back
+  // later. Best-effort: a failure here must not block the send.
+  const mediaUrlPromise = file
+    .arrayBuffer()
+    .then((bytes) => uploadToBlob(bytes, file.type || 'application/octet-stream', extFromMime(file.type || '')))
+    .catch(() => null);
+
   // 1. Upload the file to Meta to obtain a media id.
   const uploadForm = new FormData();
   uploadForm.append('messaging_product', 'whatsapp');
@@ -95,11 +104,12 @@ export async function POST(request: NextRequest) {
 
   // 3. Log it so it shows in the thread (and stays in bot context if handed back).
   const outgoingId: string | null = sendData?.messages?.[0]?.id ?? null;
+  const mediaUrl = await mediaUrlPromise;
   try {
     await ensureChatHistoryColumns(pool);
     await pool.query(
-      'INSERT INTO wa_chat_history (phone_number, role, content, media_type, media_id, wa_message_id) VALUES ($1, $2, $3, $4, $5, $6)',
-      [phone, 'assistant', caption || `[${type}]`, type, mediaId, outgoingId]
+      'INSERT INTO wa_chat_history (phone_number, role, content, media_type, media_id, media_url, wa_message_id) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [phone, 'assistant', caption || `[${type}]`, type, mediaId, mediaUrl, outgoingId]
     );
   } catch {
     // Message was sent; a logging failure shouldn't fail the request.

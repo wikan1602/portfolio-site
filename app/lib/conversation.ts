@@ -17,8 +17,10 @@ export async function ensureStateTable(pool: Pool): Promise<void> {
 }
 
 // Adds nullable columns to the existing wa_chat_history table: media info for
-// inbound photos/stickers/etc., and wa_message_id (the WhatsApp message id, aka
-// "wamid") so we can reply-quote and react to specific messages.
+// inbound photos/stickers/etc., wa_message_id (the WhatsApp message id, aka
+// "wamid") so we can reply-quote and react to specific messages, and media_url
+// — a permanent Vercel Blob copy, since Meta's media_id only resolves for a
+// limited window (~30 days).
 // Idempotent + cached per process.
 let columnsEnsured = false;
 export async function ensureChatHistoryColumns(pool: Pool): Promise<void> {
@@ -27,6 +29,7 @@ export async function ensureChatHistoryColumns(pool: Pool): Promise<void> {
     `ALTER TABLE wa_chat_history
        ADD COLUMN IF NOT EXISTS media_type    TEXT,
        ADD COLUMN IF NOT EXISTS media_id      TEXT,
+       ADD COLUMN IF NOT EXISTS media_url     TEXT,
        ADD COLUMN IF NOT EXISTS wa_message_id TEXT,
        ADD COLUMN IF NOT EXISTS reaction      TEXT`
   );
