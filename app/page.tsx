@@ -29,9 +29,6 @@ export default function Home() {
             I help teams replace manual, error-prone workflows with private, self-hosted systems — data pipelines built on{" "}
             <span className="text-fg font-semibold">n8n</span>, and secure{" "}
             <span className="text-fg font-semibold">Local-LLM</span> integration that keeps sensitive data in-house.
-            <span className="block mt-3 font-mono text-[12.5px] text-subtle tracking-[0.01em]">
-              // Mengubah pekerjaan manual menjadi sistem yang berjalan sendiri.
-            </span>
           </p>
 
           <div className="wp-rise min-w-[210px] border-t border-border-strong pt-3.5 flex flex-col gap-[11px] font-mono text-[11.5px]" style={{ animationDelay: "0.24s" }}>
