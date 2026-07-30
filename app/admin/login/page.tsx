@@ -31,16 +31,19 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-6">
+    <main className="min-h-screen bg-[#E8ECE8] text-[#10231F] flex items-center justify-center px-6 font-[family-name:var(--font-plex)]">
       <div className="w-full max-w-sm space-y-6">
-        <div className="space-y-1 text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Admin Access</h1>
-          <p className="text-sm text-slate-500">Enter the admin password to view chat history.</p>
+        <div className="space-y-2 text-center">
+          <div className="flex items-center justify-center gap-2.5">
+            <span className="w-9 h-9 rounded-lg bg-[#25D366] grid place-items-center font-[family-name:var(--font-space)] font-bold text-[17px] text-[#0D2B25]">R</span>
+            <span className="font-[family-name:var(--font-space)] font-semibold text-xl">Relay</span>
+          </div>
+          <p className="text-sm text-[#10231F]/55">Sign in to your WhatsApp bot console.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl space-y-4">
+        <form onSubmit={handleSubmit} className="bg-white border border-[#10231F]/10 p-6 rounded-[12px] shadow-[0_2px_8px_rgba(16,35,31,.08)] space-y-4">
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium text-slate-300">
+            <label htmlFor="password" className="text-[11.5px] font-semibold tracking-[0.06em] uppercase text-[#10231F]/45">
               Password
             </label>
             <input
@@ -50,18 +53,18 @@ export default function AdminLoginPage() {
               autoFocus
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-[#F5F7F5] border border-[#10231F]/12 rounded-lg px-4 py-2.5 text-sm text-[#10231F] focus:outline-none focus:border-[#128C7E] transition-colors"
             />
           </div>
 
-          {error && <p className="text-sm text-rose-400">{error}</p>}
+          {error && <p className="text-sm text-[#B03D30]">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white font-medium py-2.5 rounded-lg transition-colors"
+            className="w-full bg-[#0D2B25] hover:bg-[#128C7E] disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg transition-colors"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
       </div>

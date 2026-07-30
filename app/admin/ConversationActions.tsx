@@ -92,16 +92,16 @@ export default function ConversationActions({
   const sendLabel = busy ? "Sending…" : file ? "Send file" : "Send reply";
 
   return (
-    <div className="space-y-3 border-b border-slate-800 pb-4 mb-4">
+    <div className="space-y-3 border-b border-[#10231F]/10 pb-4 mb-4">
       {/* Mode toggle */}
       <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-xs font-mono">
-          <span className="text-slate-500">Mode:</span>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="text-[#10231F]/50">Mode:</span>
           <span
-            className={`px-2 py-0.5 rounded border ${
+            className={`px-2 py-0.5 rounded-full border font-semibold ${
               isHuman
-                ? "text-amber-300 border-amber-900/60 bg-amber-950/30"
-                : "text-blue-300 border-blue-900/60 bg-blue-950/30"
+                ? "text-[#9A6E1E] border-[#E8A33D]/40 bg-[#FDF3E2]"
+                : "text-[#136B3B] border-[#25D366]/40 bg-[#25D366]/[0.14]"
             }`}
           >
             {isHuman ? "HUMAN (bot paused)" : "BOT (auto-reply)"}
@@ -110,7 +110,7 @@ export default function ConversationActions({
         <button
           onClick={toggleMode}
           disabled={busy}
-          className="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500 text-slate-200 disabled:opacity-50 transition-colors"
+          className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#10231F]/15 hover:border-[#10231F]/30 text-[#10231F] disabled:opacity-50 transition-colors"
         >
           {isHuman ? "Hand back to bot" : "Take over (pause bot)"}
         </button>
@@ -119,19 +119,19 @@ export default function ConversationActions({
       {/* Manual reply box */}
       <form onSubmit={handleSend} className="space-y-2">
         {!within24h && (
-          <p className="text-[11px] text-amber-400/90 leading-snug">
+          <p className="text-[11px] text-[#9A6E1E] leading-snug">
             ⚠️ Last inbound message was over 24h ago. WhatsApp only allows free-form
             replies within 24h — this may be rejected unless you use an approved template.
           </p>
         )}
         {replyingTo && (
-          <div className="flex items-center gap-2 text-xs bg-slate-900/60 border-l-2 border-blue-500 rounded px-3 py-1.5">
-            <span className="text-slate-500 shrink-0">↩ Replying to {replyingTo.isBot ? "bot" : "customer"}:</span>
-            <span className="text-slate-300 truncate">{replyingTo.preview}</span>
+          <div className="flex items-center gap-2 text-xs bg-[#F5F7F5] border-l-2 border-[#128C7E] rounded px-3 py-1.5">
+            <span className="text-[#10231F]/50 shrink-0">↩ Replying to {replyingTo.isBot ? "bot" : "customer"}:</span>
+            <span className="text-[#10231F]/80 truncate">{replyingTo.preview}</span>
             <button
               type="button"
               onClick={onClearReply}
-              className="ml-auto text-slate-500 hover:text-rose-400"
+              className="ml-auto text-[#10231F]/50 hover:text-[#B03D30]"
               aria-label="Cancel reply"
             >
               ✕
@@ -152,18 +152,18 @@ export default function ConversationActions({
               ? "Type a manual reply…"
               : "Tip: take over first so the bot doesn't reply too."
           }
-          className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+          className="w-full bg-white border border-[#10231F]/15 rounded-lg px-3 py-2 text-sm text-[#10231F] placeholder:text-[#10231F]/40 focus:outline-none focus:border-[#128C7E] transition-colors resize-none"
         />
 
         {/* Staged attachment */}
         {file && (
-          <div className="flex items-center gap-2 text-xs bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-1.5">
-            <span className="text-slate-300 truncate">📎 {file.name}</span>
-            <span className="text-slate-600">({Math.round(file.size / 1024)} KB)</span>
+          <div className="flex items-center gap-2 text-xs bg-[#F5F7F5] border border-[#10231F]/10 rounded-lg px-3 py-1.5">
+            <span className="text-[#10231F]/80 truncate">📎 {file.name}</span>
+            <span className="text-[#10231F]/45">({Math.round(file.size / 1024)} KB)</span>
             <button
               type="button"
               onClick={clearFile}
-              className="ml-auto text-slate-500 hover:text-rose-400"
+              className="ml-auto text-[#10231F]/50 hover:text-[#B03D30]"
               aria-label="Remove attachment"
             >
               ✕
@@ -189,19 +189,19 @@ export default function ConversationActions({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={busy}
-              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500 text-slate-300 disabled:opacity-50 transition-colors"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#10231F]/15 hover:border-[#10231F]/30 text-[#10231F]/80 disabled:opacity-50 transition-colors"
             >
               📎 Attach
             </button>
             <div className="text-xs">
-              {error && <span className="text-rose-400">{error}</span>}
-              {sent && !error && <span className="text-emerald-400">Sent ✓</span>}
+              {error && <span className="text-[#B03D30]">{error}</span>}
+              {sent && !error && <span className="text-[#136B3B]">Sent ✓</span>}
             </div>
           </div>
           <button
             type="submit"
             disabled={!canSend}
-            className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-900 disabled:opacity-60 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors"
+            className="bg-[#128C7E] hover:bg-[#0E6B60] disabled:bg-[#128C7E]/40 disabled:opacity-60 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors"
           >
             {sendLabel}
           </button>

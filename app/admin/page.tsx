@@ -1,189 +1,170 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/app/lib/auth";
 import { getPool } from "@/app/lib/db";
-import { getMode, ensureChatHistoryColumns, type ConversationMode } from "@/app/lib/conversation";
-import LogoutButton from "./LogoutButton";
+import { getDashboardStats, getContacts, type DashboardStats, type Contact } from "@/app/lib/stats";
+import { formatWIB } from "@/app/lib/format";
 import AutoRefresh from "./AutoRefresh";
-import ChatPanel from "./ChatPanel";
 
-// Reads cookies + the database at request time — never prerender at build.
 export const dynamic = "force-dynamic";
 
-type Conversation = { phone_number: string; last_at: string; msg_count: number };
-type Message = {
-  role: string;
-  content: string;
-  created_at: string;
-  media_type: string | null;
-  media_id: string | null;
-  wa_message_id: string | null;
-  reaction: string | null;
-};
+const card = "bg-white border border-[#10231F]/[0.09] rounded-[10px]";
+const kpiLabel = "text-[11.5px] font-semibold tracking-[0.08em] uppercase text-[#10231F]/50";
+const kpiValue = "font-[family-name:var(--font-space)] font-semibold text-[30px] leading-none";
+const heading = "font-[family-name:var(--font-space)] font-semibold";
 
-// This renders on the server (Vercel runs in UTC), so an explicit timeZone is
-// required or timestamps show as GMT+0. WIB = Asia/Jakarta (UTC+7).
-const TIME_ZONE = "Asia/Jakarta";
-
-function formatTime(value: string): string {
-  const d = new Date(value);
-  if (isNaN(d.getTime())) return "";
-  return d.toLocaleString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: TIME_ZONE,
-  });
-}
-
-export default async function AdminPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ phone?: string }>;
-}) {
+export default async function DashboardPage() {
   if (!(await isAuthenticated())) redirect("/admin/login");
 
-  const { phone } = await searchParams;
-
-  let conversations: Conversation[] = [];
-  let messages: Message[] = [];
-  let mode: ConversationMode = "bot";
-  let within24h = true;
+  let stats: DashboardStats | null = null;
+  let recent: Contact[] = [];
   let dbError: string | null = null;
 
   try {
     const pool = getPool();
-    await ensureChatHistoryColumns(pool); // media + wa_message_id columns must exist for the SELECT below
-    conversations = (
-      await pool.query(
-        `SELECT phone_number, MAX(created_at) AS last_at, COUNT(*)::int AS msg_count
-         FROM wa_chat_history
-         GROUP BY phone_number
-         ORDER BY last_at DESC`
-      )
-    ).rows as Conversation[];
-
-    if (phone) {
-      messages = (
-        await pool.query(
-          `SELECT role, content, created_at, media_type, media_id, wa_message_id, reaction
-           FROM wa_chat_history
-           WHERE phone_number = $1
-           ORDER BY created_at ASC`,
-          [phone]
-        )
-      ).rows as Message[];
-
-      mode = await getMode(pool, phone);
-
-      // 24-hour customer-service window is measured from the last inbound message.
-      const lastInbound = [...messages].reverse().find((m) => m.role === "user");
-      if (lastInbound) {
-        within24h = Date.now() - new Date(lastInbound.created_at).getTime() < 24 * 60 * 60 * 1000;
-      } else {
-        within24h = false;
-      }
-    }
+    stats = await getDashboardStats(pool);
+    recent = (await getContacts(pool)).slice(0, 6);
   } catch (err) {
     dbError = err instanceof Error ? err.message : "Failed to load data.";
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 px-6 py-10">
-      <div className="max-w-6xl mx-auto space-y-6">
-        {/* Auto-refresh keeps the view in sync without manual reloads.
-            Always on so a transient DB error self-heals without a manual reload. */}
-        <AutoRefresh />
+    <div className="flex flex-col gap-[22px]">
+      <AutoRefresh />
 
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">WhatsApp Chat History</h1>
-            <p className="text-sm text-slate-500 flex items-center gap-2">
-              {!dbError && (
-                <span className="inline-flex items-center gap-1.5 text-emerald-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Live
-                </span>
-              )}
-              <span>Auto-updating every 5s.</span>
-            </p>
-          </div>
-          <LogoutButton />
+      {/* Header */}
+      <div className="flex items-end gap-4 flex-wrap">
+        <div className="flex flex-col gap-1">
+          <h1 className={`${heading} text-[26px] tracking-[-0.01em] m-0`}>WhatsApp Bot Console</h1>
+          <div className="text-[13px] text-[#10231F]/55">Live metrics from your bot&apos;s database</div>
         </div>
-
-        {dbError && (
-          <div className="bg-rose-950/40 border border-rose-800 text-rose-300 text-sm p-4 rounded-xl">
-            Could not load data: {dbError}
-          </div>
-        )}
-
+        <div className="flex-1" />
         {!dbError && (
-          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6">
-            {/* Conversation list */}
-            <aside className="space-y-2">
-              <h2 className="text-xs font-mono uppercase tracking-wider text-slate-500 px-1">
-                Conversations ({conversations.length})
-              </h2>
-              <div className="space-y-1 max-h-[70vh] overflow-y-auto pr-1">
-                {conversations.length === 0 && (
-                  <p className="text-sm text-slate-600 px-1">No conversations yet.</p>
-                )}
-                {conversations.map((c) => {
-                  const active = c.phone_number === phone;
-                  return (
-                    <a
-                      key={c.phone_number}
-                      href={`/admin?phone=${encodeURIComponent(c.phone_number)}`}
-                      className={`block px-3 py-2.5 rounded-lg border transition-colors ${
-                        active
-                          ? "bg-blue-950/40 border-blue-800"
-                          : "bg-slate-900/40 border-slate-800/60 hover:border-slate-700"
-                      }`}
-                    >
-                      <div className="text-sm font-mono text-slate-200">{c.phone_number}</div>
-                      <div className="flex items-center justify-between text-[11px] text-slate-500 mt-0.5">
-                        <span>{c.msg_count} msgs</span>
-                        <span>{formatTime(c.last_at)}</span>
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
-            </aside>
-
-            {/* Message thread */}
-            <section className="bg-slate-900/30 border border-slate-800/60 rounded-2xl p-5 h-[75vh] flex flex-col">
-              {!phone && (
-                <p className="text-sm text-slate-600">Select a conversation to view its messages.</p>
-              )}
-
-              {phone && (
-                <>
-                  <div className="text-sm font-mono text-slate-400 border-b border-slate-800 pb-3 mb-4 shrink-0">
-                    {phone}
-                  </div>
-                  <ChatPanel
-                    key={phone}
-                    phone={phone}
-                    mode={mode}
-                    within24h={within24h}
-                    messages={messages.map((m) => ({
-                      content: m.content,
-                      time: formatTime(m.created_at),
-                      isBot: m.role === "assistant",
-                      mediaType: m.media_type,
-                      mediaId: m.media_id,
-                      wamid: m.wa_message_id,
-                      reaction: m.reaction,
-                    }))}
-                  />
-                </>
-              )}
-            </section>
+          <div className="flex items-center gap-[7px] px-3 py-1.5 rounded-full bg-[#25D366]/[0.14] border border-[#25D366]/40">
+            <span className="w-2 h-2 rounded-full bg-[#1FA855] animate-pulse" />
+            <span className="text-[12.5px] font-semibold text-[#136B3B]">Live · auto-refresh</span>
           </div>
         )}
       </div>
-    </main>
+
+      {dbError && (
+        <div className="bg-[#E05B4C]/10 border border-[#E05B4C]/30 text-[#B03D30] text-sm p-4 rounded-[10px]">
+          Could not load data: {dbError}
+        </div>
+      )}
+
+      {stats && (
+        <>
+          {/* KPI cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className={`${card} p-5 flex flex-col gap-2`}>
+              <div className={kpiLabel}>Total messages</div>
+              <div className={kpiValue}>{stats.totalMessages.toLocaleString()}</div>
+              <div className="text-[12.5px] text-[#10231F]/50">All conversations</div>
+            </div>
+            <div className={`${card} p-5 flex flex-col gap-2`}>
+              <div className={kpiLabel}>Messages · 24h</div>
+              <div className={kpiValue}>{stats.messages24h.toLocaleString()}</div>
+              <div className="text-[12.5px] text-[#1FA855] font-medium">Last 24 hours</div>
+            </div>
+            <div className={`${card} p-5 flex flex-col gap-2`}>
+              <div className={kpiLabel}>Conversations</div>
+              <div className={kpiValue}>{stats.totalConversations.toLocaleString()}</div>
+              <div className="text-[12.5px] text-[#10231F]/50">Unique contacts</div>
+            </div>
+            <div className={`${card} p-5 flex flex-col gap-2`}>
+              <div className={kpiLabel}>Open windows</div>
+              <div className={kpiValue}>{stats.openWindows.toLocaleString()}</div>
+              <div className="text-[12.5px] text-[#10231F]/50">Inside 24-hour window</div>
+            </div>
+          </div>
+
+          {/* Recent + side */}
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 items-start">
+            {/* Recent conversations */}
+            <div className={`${card} overflow-hidden`}>
+              <div className="flex items-center px-5 py-4 border-b border-[#10231F]/[0.07]">
+                <span className={`${heading} text-[15px]`}>Recent conversations</span>
+                <Link href="/admin/inbox" className="ml-auto text-[12.5px] font-semibold text-[#128C7E] hover:underline">
+                  Open inbox →
+                </Link>
+              </div>
+              <div className="grid grid-cols-[1.4fr_0.7fr_0.9fr_0.7fr] px-5 py-2.5 gap-3 text-[11px] font-semibold tracking-[0.07em] uppercase text-[#10231F]/45 border-b border-[#10231F]/[0.07]">
+                <span>Contact</span><span>Mode</span><span>Messages</span><span>Last active</span>
+              </div>
+              {recent.length === 0 && (
+                <div className="px-5 py-6 text-sm text-[#10231F]/50">No conversations yet.</div>
+              )}
+              {recent.map((c) => (
+                <Link
+                  key={c.phone_number}
+                  href={`/admin/inbox?phone=${encodeURIComponent(c.phone_number)}`}
+                  className="grid grid-cols-[1.4fr_0.7fr_0.9fr_0.7fr] px-5 py-3 gap-3 text-[13px] items-center border-b border-[#10231F]/[0.05] last:border-0 hover:bg-[#F5F7F5] transition-colors"
+                >
+                  <span className="font-mono text-[12.5px] text-[#10231F]/80">{c.phone_number}</span>
+                  <span>
+                    <ModePill mode={c.mode} />
+                  </span>
+                  <span className="text-[#10231F]/60">{c.msg_count}</span>
+                  <span className="text-[#10231F]/55">{formatWIB(c.last_at)}</span>
+                </Link>
+              ))}
+            </div>
+
+            {/* Side: mode split + webhook */}
+            <div className="flex flex-col gap-4">
+              <div className={`${card} p-5 flex flex-col gap-3`}>
+                <span className={`${heading} text-[15px]`}>Handling mode</span>
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 flex flex-col gap-1">
+                    <span className="text-[12.5px] text-[#10231F]/55">Bot (auto)</span>
+                    <span className="font-[family-name:var(--font-space)] font-semibold text-[22px]">{stats.botCount}</span>
+                  </div>
+                  <div className="flex-1 flex flex-col gap-1">
+                    <span className="text-[12.5px] text-[#10231F]/55">Human takeover</span>
+                    <span className="font-[family-name:var(--font-space)] font-semibold text-[22px] text-[#128C7E]">{stats.humanCount}</span>
+                  </div>
+                </div>
+                <div className="h-2 rounded-full bg-[#10231F]/[0.08] overflow-hidden flex">
+                  <div
+                    className="h-full bg-[#25D366]"
+                    style={{ width: `${pct(stats.botCount, stats.botCount + stats.humanCount)}%` }}
+                  />
+                  <div
+                    className="h-full bg-[#128C7E]"
+                    style={{ width: `${pct(stats.humanCount, stats.botCount + stats.humanCount)}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className={`${card} p-5 flex flex-col gap-3`}>
+                <div className="flex items-center gap-2">
+                  <span className={`${heading} text-[15px]`}>Webhook</span>
+                  <span className="ml-auto text-[12.5px] font-semibold text-[#136B3B]">Endpoint live</span>
+                </div>
+                <div className="font-mono text-[12px] text-[#10231F]/70 bg-[#F5F7F5] border border-[#10231F]/[0.07] rounded-[7px] px-3 py-2.5 truncate">
+                  /api/webhook
+                </div>
+                <Link href="/admin/settings" className="text-[12.5px] font-semibold text-[#128C7E] hover:underline">
+                  Configure in Settings →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function pct(n: number, total: number) {
+  return total > 0 ? Math.round((n / total) * 100) : 0;
+}
+
+function ModePill({ mode }: { mode: "bot" | "human" }) {
+  return mode === "human" ? (
+    <span className="px-2 py-0.5 rounded-full bg-[#128C7E]/10 border border-[#128C7E]/30 text-[11px] font-semibold text-[#0E6B60]">Human</span>
+  ) : (
+    <span className="px-2 py-0.5 rounded-full bg-[#25D366]/[0.14] text-[11px] font-semibold text-[#136B3B]">Bot</span>
   );
 }

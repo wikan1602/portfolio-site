@@ -47,7 +47,7 @@ function MessageActions({
       <button
         type="button"
         onClick={() => onReply?.(message)}
-        className="text-[10px] text-slate-500 hover:text-slate-300 transition-colors"
+        className="text-[10px] text-[#667781] hover:text-[#111B21] transition-colors"
       >
         ↩ Reply
       </button>
@@ -55,12 +55,12 @@ function MessageActions({
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
-          className="text-[10px] text-slate-500 hover:text-slate-300 transition-colors"
+          className="text-[10px] text-[#667781] hover:text-[#111B21] transition-colors"
         >
           😀 React
         </button>
         {open && (
-          <div className="absolute z-10 bottom-full mb-1 flex gap-1 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 shadow-lg">
+          <div className="absolute z-10 bottom-full mb-1 flex gap-1 bg-white border border-[#10231F]/15 rounded-lg px-2 py-1 shadow-lg">
             {QUICK_EMOJIS.map((e) => (
               <button
                 key={e}
@@ -99,7 +99,7 @@ function MediaBlock({ type, id }: { type: string; id: string }) {
       href={src}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 text-sm text-blue-300 hover:text-blue-200 underline"
+      className="inline-flex items-center gap-2 text-sm text-[#128C7E] hover:text-[#075E54] underline"
     >
       📎 Open {type}
     </a>
@@ -147,21 +147,19 @@ export default function MessageList({
     <div
       ref={containerRef}
       onScroll={handleScroll}
-      className="flex-1 overflow-y-auto space-y-4 pr-1"
+      className="flex-1 overflow-y-auto space-y-2.5 p-3 bg-[#E5DDD5] rounded-lg"
     >
       {messages.length === 0 && (
-        <p className="text-sm text-slate-600">No messages in this conversation.</p>
+        <p className="text-sm text-[#10231F]/50">No messages in this conversation.</p>
       )}
       {messages.map((m, i) => (
         <div key={i} className={`flex ${m.isBot ? "justify-end" : "justify-start"}`}>
           <div
-            className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
-              m.isBot
-                ? "bg-blue-600/20 border border-blue-800/50"
-                : "bg-slate-800/60 border border-slate-700/50"
+            className={`max-w-[80%] rounded-lg px-3 py-2 shadow-[0_1px_1px_rgba(16,35,31,.12)] ${
+              m.isBot ? "bg-[#D9FDD3]" : "bg-white"
             }`}
           >
-            <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <div className="text-[10px] font-medium uppercase tracking-wider text-[#667781] mb-1">
               {m.isBot ? "Bot" : "Customer"} · {m.time}
             </div>
             {m.mediaType && m.mediaId && (
@@ -171,17 +169,17 @@ export default function MessageList({
             )}
             {/* Show text unless it's just the "[type]" placeholder for a media message */}
             {!(m.mediaType && m.content === `[${m.mediaType}]`) && (
-              <div className="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
+              <div className="text-sm text-[#111B21] whitespace-pre-wrap leading-relaxed">
                 {m.content}
               </div>
             )}
             {m.reaction && (
               <div className="mt-1.5">
                 <span
-                  className="inline-flex items-center gap-1 text-xs bg-slate-950/70 border border-slate-700 rounded-full px-2 py-0.5"
+                  className="inline-flex items-center gap-1 text-xs bg-white border border-[#10231F]/15 rounded-full px-2 py-0.5"
                   title="Reaction you sent"
                 >
-                  {m.reaction} <span className="text-[9px] text-slate-500">you</span>
+                  {m.reaction} <span className="text-[9px] text-[#667781]">you</span>
                 </span>
               </div>
             )}
