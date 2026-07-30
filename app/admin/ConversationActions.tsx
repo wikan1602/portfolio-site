@@ -92,7 +92,7 @@ export default function ConversationActions({
   const sendLabel = busy ? "Sending…" : file ? "Send file" : "Send reply";
 
   return (
-    <div className="space-y-3 border-b border-[#10231F]/10 pb-4 mb-4">
+    <div className="space-y-3 border-t border-[#10231F]/10 pt-4 mt-3">
       {/* Mode toggle */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-xs">

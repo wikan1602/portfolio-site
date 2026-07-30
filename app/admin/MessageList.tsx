@@ -147,7 +147,7 @@ export default function MessageList({
     <div
       ref={containerRef}
       onScroll={handleScroll}
-      className="flex-1 overflow-y-auto space-y-2.5 p-3 bg-[#E5DDD5] rounded-lg"
+      className="wa-scroll flex-1 overflow-y-auto space-y-2.5 p-3 bg-[#E5DDD5] rounded-lg"
     >
       {messages.length === 0 && (
         <p className="text-sm text-[#10231F]/50">No messages in this conversation.</p>

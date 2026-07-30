@@ -90,7 +90,7 @@ export default async function InboxPage({
             <div className="px-4 py-3 border-b border-[#10231F]/[0.07] text-[11px] font-semibold tracking-[0.07em] uppercase text-[#10231F]/45">
               Conversations ({conversations.length})
             </div>
-            <div className="overflow-y-auto max-h-[74vh]">
+            <div className="wa-scroll overflow-y-auto max-h-[74vh]">
               {conversations.length === 0 && (
                 <p className="text-sm text-[#10231F]/50 px-4 py-4">No conversations yet.</p>
               )}

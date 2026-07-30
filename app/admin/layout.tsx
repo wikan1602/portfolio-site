@@ -1,5 +1,6 @@
 import { Space_Grotesk, IBM_Plex_Sans } from "next/font/google";
 import AdminShell from "@/components/admin/AdminShell";
+import "./admin.css";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space",
