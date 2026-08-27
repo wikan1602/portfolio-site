@@ -1,16 +1,9 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
-// Public pages render inside a centered 1200px column with border rules (the
-// redesign's editorial frame) plus nav + footer. /admin is passed through
-// untouched so the internal console keeps its own full-width dark layout.
+// Every page renders inside a centered 1200px column with border rules (the
+// redesign's editorial frame) plus nav + footer.
 export default function SiteShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  if (pathname?.startsWith("/admin")) return <>{children}</>;
-
   return (
     <div className="max-w-[1200px] mx-auto border-x border-border min-h-screen flex flex-col">
       <Navbar />

@@ -9,7 +9,7 @@ Personal portfolio website showcasing my work as an AI/ML Engineer, built with N
 - **About** — background, skills, and experience summary
 - **Projects** — showcase of AI/ML and software engineering work
 - **Blog** — writing on AI, machine learning, and engineering topics
-- **Contact form** — direct way to get in touch
+- **Contact** — direct channels (email, GitHub, LinkedIn)
 - **Dark mode** — light/dark theme toggle
 
 ## Tech Stack
